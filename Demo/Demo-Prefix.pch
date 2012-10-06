@@ -1,0 +1,40 @@
+//
+// Prefix header for all source files of the 'Demo' target in the 'Demo' project
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_5_0
+#warning "This project uses features only available in iOS SDK 5.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+    #import <CoreData/CoreData.h>
+
+    #define FBGraphAPIUrl @"https://graph.facebook.com"
+    #define FBAppId  @"242887185779527"
+    #define FBPageId @"202289703195359"
+    #define FBAlbumId @"46988"
+
+    #define TwitterApiURL @"https://api.twitter.com"
+    #define TwitterTokenUri @"/oauth/request_token"
+    #define TwitterConsumerKey @"glBDLbNxlFpOyuVMRuXhWg"
+    #define TwitterConsumerSecret @"PEyZRtTYCwzgAotaYqv6ffvuTqkj7ZjC3huLirhcGl4"
+
+    #define ServerURL @"http://pound.cs.columbia.edu:8823"
+    #define ServerUploadURI @"/upload.py"
+    #define ServerDetectionURI @"/get_crop.py?client_id=%@"
+    #define ServerRecognitionResultURI @"/get_result.py?client_id=%@"
+    #define ServerLabelBreedURI @"/user_label.py?client_id=%@&client_label=%@"
+    #define ServerTransferUrlURI @"/FB_image.py?FB_link=%@"
+    #define ServerTransferredJpgBaseURI @"/~cck/FB_images/"
+
+//    #define ServerURL @"http://www.valgo.us"
+//    #define ServerUploadURI @"/python/upload.py/file"
+//    #define ServerDetectionURI @"/python/get_crop.py/get_rect?client_id=%@"
+//    #define ServerRecognitionResultURI @"/python/get_result.py/rank_list?client_id=%@"
+//    #define ServerLabelBreedURI @"/python/label_breed.py/label?client_id=%@&label=%@"
+
+#endif
