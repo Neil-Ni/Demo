@@ -10,6 +10,6 @@
 #import "draggableImageView.h"
 
 @interface SecondViewController : UIViewController
-@property (strong, nonatomic) draggableImageView *imageview;
+@property (strong, nonatomic) NSMutableArray *imageViewArray_;
 
 @end

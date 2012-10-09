@@ -24,7 +24,7 @@
 @end
 
 @implementation SecondViewController
-@synthesize imageview;
+@synthesize imageViewArray_;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -36,10 +36,11 @@
         UIButton *sendImageButton_ = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         CGRect frame = CGRectMake(124, 20, 74, 44);
         [sendImageButton_ setFrame:frame];
-        [sendImageButton_ setTitle:@"Send" forState:UIControlStateNormal];
+        [sendImageButton_ setTitle:@"Save" forState:UIControlStateNormal];
         [sendImageButton_ addTarget:self action:@selector(handlesendImageButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:sendImageButton_];
-//        drawImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+        imageViewArray_ = [[NSMutableArray alloc] init];
+        
         drawImage = [[UIImageView alloc] initWithFrame:self.view.frame];
         drawImage.backgroundColor = [UIColor clearColor];
         [self.view addSubview:drawImage];
@@ -58,13 +59,21 @@
     return newSize;
 }
 
+- (void)setUpImageViews{
+    for(draggableImageView *view in imageViewArray_){
+        [view setUserInteractionEnabled:NO];
+        [self.view addSubview:view];
+        [self.view sendSubviewToBack:view];
+    }
+
+
+}
+
 - (void)viewWillAppear:(BOOL)animated{
-    if(imageview){
-        [imageview setUserInteractionEnabled:NO];
+    if(imageViewArray_){
+        finalSize = CGSizeMake(640, 960);        
+        [self setUpImageViews];
         
-        finalSize = CGSizeMake(640, 960);
-        [self.view addSubview:imageview];
-        [self.view sendSubviewToBack:imageview];
     }else{
         NSLog(@"No ImageView");
     }    
@@ -90,28 +99,31 @@
 //    UIGraphicsEndImageContext();
 //    UIImageWriteToSavedPhotosAlbum(SaveImage, self,@selector(image:didFinishSavingWithError:contextInfo:), nil);
     
-    if(imageview){
+    if([imageViewArray_ count]){
 
         UIImage *maskImage = drawImage.image;
-        UIImage *rawImage = [imageview.image imageRotatedByRadians:imageview.angle];
-        
         CGSize maskImageSize = [maskImage size];
         
-        NSLog(@"maskImageSize %@", NSStringFromCGSize(maskImageSize));
-        NSLog(@"finalSize %@", NSStringFromCGSize(finalSize));
-
         UIGraphicsBeginImageContext(finalSize);
         
-        float widthRatio = finalSize.width/self.view.frame.size.width;
-        float heightRatio = finalSize.height/self.view.frame.size.height;
-        
-        CGSize size = rawImage.size;
-        
-        [rawImage drawInRect:CGRectMake(imageview.center.x*widthRatio - size.width/2.,
-                                        imageview.center.y*heightRatio - size.height/2.,
-                                        size.width, size.height)];
-        
-//        [rawImage drawInRect:CGRectMake(0, 0, finalSize.width, finalSize.height)];
+        for(int i = 0; i< [imageViewArray_ count]; i++){
+            
+            draggableImageView *imageview = [imageViewArray_ objectAtIndex:i];
+            UIImage *rawImage = [imageview.image imageRotatedByRadians:imageview.angle];
+    
+//            NSLog(@"maskImageSize %@", NSStringFromCGSize(maskImageSize));
+//            NSLog(@"finalSize %@", NSStringFromCGSize(finalSize));
+            
+            float widthRatio = finalSize.width/self.view.frame.size.width;
+            float heightRatio = finalSize.height/self.view.frame.size.height;
+            
+            CGSize size = rawImage.size;
+            
+            [rawImage drawInRect:CGRectMake(imageview.center.x*widthRatio - size.width/2.,
+                                            imageview.center.y*heightRatio - size.height/2.,
+                                            size.width, size.height)];
+            
+        }
         [maskImage drawInRect:CGRectMake(0, 0, maskImageSize.width, maskImageSize.height)];
         
         UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();

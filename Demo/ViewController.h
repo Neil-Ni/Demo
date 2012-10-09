@@ -20,6 +20,13 @@
     NSTimer *progressUpdateTimer_;
     UIProgressView *progressBar;
     float maxProgressValue;
+    
+    //Demo
+    UIButton *showDrawingButton_;
+    UIButton *showAnimationButton_;
+    
+    NSMutableArray *imageViewArray_;
+    int imageViewCount;
 }
 @property (nonatomic, strong) NSNumber *isIdle;
 

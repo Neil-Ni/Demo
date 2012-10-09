@@ -10,6 +10,8 @@
 #import "draggableImageView.h"
 #import "SecondViewController.h"
 #import "UIImage+scale.h"
+#import "AnimationViewController.h"
+#import "ViewControllerWithFlip.h"
 
 @interface ViewController () {
     NSMutableArray *imageReferenceURLs;
@@ -57,6 +59,24 @@ static bool TESTING;
     [self.view addSubview:sendImageButton_];
     [self.view addSubview:deleteImageButton_];
     
+    /*Buttons for demo functionalities*/
+    
+    showDrawingButton_ = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    frame = IPHONE? CGRectMake(20, 84, 74, 44): CGRectMake(244, 50, 74, 44);
+    [showDrawingButton_ setFrame:frame];
+    [showDrawingButton_ setTitle:@"Draw" forState:UIControlStateNormal];
+    [showDrawingButton_ addTarget:self action:@selector(handleshowSrawingButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    
+    showAnimationButton_ = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    frame = IPHONE? CGRectMake(124, 84, 74, 44): CGRectMake(348, 50, 74, 44);
+    [showAnimationButton_ setFrame:frame];
+    [showAnimationButton_ setTitle:@"Flip" forState:UIControlStateNormal];
+    [showAnimationButton_ addTarget:self action:@selector(handleshowAnimationButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:showDrawingButton_];
+    [self.view addSubview:showAnimationButton_];
+    imageViewCount = 0;
+    imageViewArray_ = [[NSMutableArray alloc] init];
     imageReferenceURLs = [[NSMutableArray alloc] init];
     
     imagePicker_ = [[UIImagePickerController alloc] init];
@@ -152,25 +172,11 @@ static bool TESTING;
 }
 
 - (void) handlesendImageButtonTapped:(id *)sender{
-    NSLog(@"handleshowImageButtonTapped");
+    NSLog(@"handleshowImageButtonTapped");    
     draggableImageView *view = (draggableImageView *)[self.view viewWithTag:1];
-    SecondViewController *aSecondViewController = [[SecondViewController alloc] init];
-    
-    
-    UIImage *image = view.image;
-    CGSize size = view.image.size;
-    float ratio = view.frame.size.width/self.view.frame.size.width;
-    UIImage *scaledImage = [image scaleToSize:CGSizeMake(size.width*ratio,size.height*ratio)];
-    
-    //pass in three parameters right now, the imageview, the center and the degree of rotation;
-    
-    view.image = scaledImage;
-    aSecondViewController.imageview = view;
-    
-    [self.navigationController pushViewController:aSecondViewController animated:YES];
-//    [uploadListener_ upload: view.image];
-//    progressBar.progress = InitialProgress;
-//    progressBar.hidden = NO;
+    [uploadListener_ upload: view.image];
+    progressBar.progress = InitialProgress;
+    progressBar.hidden = NO;
 }
 
 - (void) handledeleteImageButtonTapped:(id *)sender{
@@ -189,6 +195,46 @@ static bool TESTING;
     deleteMode? NSLog(@"deleteMode TRUE"): NSLog(@"deleteMode FALSE");
 }
 
+- (void)handleshowSrawingButtonTapped:(id *)sender{
+    NSLog(@"handleshowSrawingButtonTapped");
+    NSLog(@"%d", imageViewCount);
+    draggableImageView *view;
+    
+    for(int i = 1; i< imageViewCount+1; i++){
+        view = (draggableImageView *)[self.view viewWithTag:i];
+        UIImage *image = view.image;
+        CGSize size = view.image.size;
+        float ratio = view.frame.size.width/self.view.frame.size.width;
+        UIImage *scaledImage = [image scaleToSize:CGSizeMake(size.width*ratio,size.height*ratio)];
+        
+        //pass in three parameters right now, the imageview, the center and the degree of rotation;
+        
+        view.image = scaledImage;
+        
+        [imageViewArray_ addObject:view];
+    }
+    NSLog(@"%d", [imageViewArray_ count]);
+
+
+    SecondViewController *aSecondViewController = [[SecondViewController alloc] init];
+    aSecondViewController.imageViewArray_ = imageViewArray_;
+    
+    [self.navigationController pushViewController:aSecondViewController animated:YES];
+    
+    
+}
+
+- (void)handleshowAnimationButtonTapped:(id *)sender{
+    NSLog(@"handleshowAnimationButtonTapped");
+    
+    
+//    AnimationViewController *aAnimationViewController = [[AnimationViewController alloc] init];
+    ViewControllerWithFlip *aViewControllerWithFlip = [[ViewControllerWithFlip alloc] init];
+    [self.navigationController pushViewController:aViewControllerWithFlip animated:YES];
+//    [self.navigationController pushViewController:aAnimationViewController animated:YES];
+
+}
+
 - (void) displayChoosenImages {
     
     int imageHeight = IPHONE? 120: 240;
@@ -196,8 +242,8 @@ static bool TESTING;
     int viewHeight = (int) self.view.frame.size.height - imageHeight;
     int viewWidth = (int) self.view.frame.size.width - imageWidth;
     
-    for(int i= 0; i< [imageReferenceURLs count]; i++){
-        NSDictionary *info = [imageReferenceURLs objectAtIndex:i];
+    for(int i= imageViewCount; i< imageViewCount+[imageReferenceURLs count]; i++){
+        NSDictionary *info = [imageReferenceURLs objectAtIndex:(i-imageViewCount)];
         UIImage *aImage = [info objectForKey:UIImagePickerControllerOriginalImage];
         
         int imageX = arc4random() %(viewWidth);
@@ -213,6 +259,7 @@ static bool TESTING;
 
         [self.view addSubview:adraggableImageView];
     }
+    imageViewCount += [imageReferenceURLs count];
 }
 
 
@@ -290,6 +337,9 @@ static bool TESTING;
     progressBar.progress = UploadFinishProgress;
 }
 - (void)updateProgressBarWith:(float)value{
+    if(value == 1.0){
+        self.isIdle = [NSNumber numberWithBool:YES];
+    }
     progressBar.progress = UploadFinishProgress*value;
 }
 

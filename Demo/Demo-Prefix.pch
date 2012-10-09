@@ -23,7 +23,8 @@
     #define TwitterConsumerKey @"glBDLbNxlFpOyuVMRuXhWg"
     #define TwitterConsumerSecret @"PEyZRtTYCwzgAotaYqv6ffvuTqkj7ZjC3huLirhcGl4"
 
-    #define ServerURL @"http://pound.cs.columbia.edu:8823"
+//    #define ServerURL @"http://pound.cs.columbia.edu:8823"
+    #define ServerURL @"http://kennel.cs.columbia.edu:8821"
     #define ServerUploadURI @"/upload.py"
     #define ServerDetectionURI @"/get_crop.py?client_id=%@"
     #define ServerRecognitionResultURI @"/get_result.py?client_id=%@"

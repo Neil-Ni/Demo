@@ -119,13 +119,19 @@
         self.client = [RKClient clientWithBaseURL:[NSURL URLWithString:ServerURL]];
     
     RKParams *params = [RKParams params];
-    NSString *noseStr = [NSString stringWithFormat: @"%.0f,%.0f", 0.0, 0.0];
+//    NSString *noseStr = [NSString stringWithFormat: @"%.0f,%.0f", 0.0, 0.0];
     //Comment this method because the version right now is just for testing, no need for the point of nose.
 //    NSString *noseStr = [NSString stringWithFormat: @"%.0f,%.0f", nosePoint.x, nosePoint.y];
     
-    [params setValue: noseStr forParam: DetectionNoseKey];
+//    [params setValue: noseStr forParam: DetectionNoseKey];
+    
+
     RKParamsAttachment *attachment = [params setData:UIImageJPEGRepresentation(img, 75) MIMEType:@"image/jpeg" forParam:@"uploadFile"];
     attachment.fileName = @"image.jpg";
+    [params setValue:@"0" forParam:@"page"];
+    [params setValue:@"0" forParam:@"photoid"];
+    [params setValue:@"0" forParam:@"albumid"];
+
     self.request = [self.client post: ServerUploadURI params:params delegate:self];
     
     NSLog(@"requested: %@, nil? %d", ServerUploadURI, self.request == nil);
@@ -234,6 +240,7 @@
     NSLog(@"[upload] isJson? %d", [response isJSON]);
     NSLog(@"[upload] what is it? %@", [response MIMEType]);
     
+    NSLog(@"%@", response.bodyAsString);
     switch (self.ListenterType) {
         case UPLOAD:{
             if (![response isJSON]) {
@@ -261,10 +268,11 @@
             NSString *client_id_string = [NSString stringWithFormat:@"%@", [d objectForKey:RecognitionClientIdKey]];
             
             NSLog(@"client_id: %@", client_id_string);
-            
-            [self.delegate setMaxProgressValue: DetectFinishProgress];
+            [self.delegate updateProgressBarWith:1.0f];
             [self.delegate updateProgressBar];
-            [self.delegate requestDetectionResult: client_id_string];
+//            [self.delegate setMaxProgressValue: DetectFinishProgress];
+//            [self.delegate updateProgressBar];
+//            [self.delegate requestDetectionResult: client_id_string];
         }
             break;
         case DETECT:{
