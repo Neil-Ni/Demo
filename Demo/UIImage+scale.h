@@ -10,7 +10,7 @@
 
 @interface UIImage (scale)
 
-- (UIImage*)scaleToSize:(CGSize)size;
+- (UIImage *)scaleToSize:(CGSize)size;
 - (UIImage *)imageAtRect:(CGRect)rect;
 - (UIImage *)imageByScalingProportionallyToMinimumSize:(CGSize)targetSize;
 - (UIImage *)imageByScalingProportionallyToSize:(CGSize)targetSize;

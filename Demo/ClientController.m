@@ -33,7 +33,6 @@
 
 - (id)init{
     self = [super init];
-//    self.client = [RKClient clientWithBaseURL:[NSURL URLWithString:ServerURL]];
     return self;
 }
 
@@ -86,6 +85,59 @@
     return 0;
 }
 
+#pragma mark INVITE
+
+- (void)inviteWithCode: (NSString *)code{
+    if (!self.client)
+        self.client = [RKClient clientWithBaseURL:[NSURL URLWithString:ServerURL]];
+    RKParams *params = [RKParams params];
+    self.userInfo = [[NSMutableDictionary alloc] init];
+    [params setValue:code forParam:@"invitation_code"];
+    self.request = [self.client post: ServerGrandsonURI params:params delegate:self];
+    NSLog(@"requested: %@, nil? %d", ServerGrandsonURI, self.request == nil);
+    self.request.backgroundPolicy = RKRequestBackgroundPolicyRequeue;
+    
+}
+
+- (void)invitefinished{
+    [self.delegate inviteFinished:self];
+}
+
+#pragma mark REGISTER
+
+- (void)reqisterNewUser{ 
+    if (!self.client)
+        self.client = [RKClient clientWithBaseURL:[NSURL URLWithString:ServerURL]];
+    
+    self.userInfo = [[NSMutableDictionary alloc] init];
+    RKParams *params = [RKParams params];
+    [params setValue:@"-1" forParam:@"private_id"];
+    self.request = [self.client post: ServerUploadURI params:params delegate:self];
+    NSLog(@"requested: %@, nil? %d", ServerUploadURI, self.request == nil);
+    self.request.backgroundPolicy = RKRequestBackgroundPolicyRequeue;
+
+}
+
+- (void)registerfinished{
+    [self.delegate registerFinished:self];
+}
+
+#pragma mark CHECKUPDATE
+
+- (void)checkUpdateOfUser: (NSString *)privateId{
+    if (!self.client)
+        self.client = [RKClient clientWithBaseURL:[NSURL URLWithString:ServerURL]];
+    self.userInfo = [[NSMutableDictionary alloc] init];
+    RKParams *params = [RKParams params];
+    [params setValue:privateId forParam:@"private_id"];
+    self.request = [self.client post: ServerUploadURI params:params delegate:self];
+    NSLog(@"requested: %@, nil? %d", ServerUploadURI, self.request == nil);
+    self.request.backgroundPolicy = RKRequestBackgroundPolicyRequeue;
+
+}
+- (void)checkUpdateFinished{
+    [self.delegate checkUpdateFinished:self];    
+}
 
 #pragma mark UPLOAD
 
@@ -211,6 +263,23 @@
 // This method
 - (void)request:(RKRequest *)request didFailLoadWithError:(NSError *)error{
     switch (self.ListenterType) {
+        case REGISTER:{
+            [self.delegate notifyError:@"registeration failed"
+                               message:error.localizedDescription];
+            [self.delegate requestFailed:self];
+        }
+            break;
+        case INVITE:{
+            [self.delegate notifyError:@"invate failed"
+                               message:error.localizedDescription];
+            [self.delegate requestFailed:self];
+        }
+            break;
+        case CHECKUPDATE:{
+            [self.delegate notifyError:@"updatecheck failed"
+                               message:error.localizedDescription];
+            [self.delegate requestFailed:self];
+        }
         case UPLOAD:{
             [self.delegate notifyError:@"Could not upload your image"
                                message:error.localizedDescription];
@@ -235,13 +304,94 @@
 }
 
 - (void)request:(RKRequest *)request didLoadResponse:(RKResponse *)response{
-    
-    NSLog(@"[upload] finished, OK? %d", [response isOK]);
-    NSLog(@"[upload] isJson? %d", [response isJSON]);
-    NSLog(@"[upload] what is it? %@", [response MIMEType]);
-    
+        
     NSLog(@"%@", response.bodyAsString);
+    
     switch (self.ListenterType) {
+        case REGISTER:{
+            if (![response isJSON]) {
+                [self.delegate notifyError:@"Sorry!"
+                                   message:kErrorUploadResponseIsNotJson];
+                [self.delegate requestFailed:self];
+                return;
+            }
+            NSDictionary *d = [response parsedBody:nil];
+            if (!d) {
+                [self.delegate notifyError:@"Sorry!"
+                                   message:kErrorUploadResponseWrongFormat];
+                [self.delegate requestFailed:self];
+                return;
+            }
+            /*1012 assuming different kind of error messages*/
+            id error_label = [d objectForKey: JsonErrorLabelKey];
+            NSString *error_msg = [d objectForKey: JsonErrorMessageKey];
+            NSLog(@"[register finished] error: %@, error_msg: %@", error_label, error_msg);
+            
+            // error occurred, then do not continued;
+            if ([self _checkReturnedError: error_label withMessage: error_msg] < 0)
+                return;
+            
+            /*1012 giving a session ID here?*/
+            //NSString *client_id_string = [NSString stringWithFormat:@"%@", [d objectForKey:RecognitionClientIdKey]];
+            
+            [self.userInfo addEntriesFromDictionary:d];
+            [self registerfinished];
+        }
+            break;
+        case CHECKUPDATE:{
+            if (![response isJSON]) {
+                [self.delegate notifyError:@"Sorry!"
+                                   message:kErrorUploadResponseIsNotJson];
+                [self.delegate requestFailed:self];
+                return;
+            }
+            NSDictionary *d = [response parsedBody:nil];
+            if (!d) {
+                [self.delegate notifyError:@"Sorry!"
+                                   message:kErrorUploadResponseWrongFormat];
+                [self.delegate requestFailed:self];
+                return;
+            }
+            
+            id error_label = [d objectForKey: JsonErrorLabelKey];
+            NSString *error_msg = [d objectForKey: JsonErrorMessageKey];
+            NSLog(@"[updatecheck finished] error: %@, error_msg: %@", error_label, error_msg);
+            
+            if ([self _checkReturnedError: error_label withMessage: error_msg] < 0)
+                return;
+            
+            [self.userInfo addEntriesFromDictionary:d];
+            [self checkUpdateFinished];
+        }
+            break;
+        case INVITE:{
+            
+            if (![response isJSON]) {
+                [self.delegate notifyError:@"Sorry!"
+                                   message:kErrorUploadResponseIsNotJson];
+                [self.delegate requestFailed:self];
+                return;
+            }
+            NSDictionary *d = [response parsedBody:nil];
+            if (!d) {
+                [self.delegate notifyError:@"Sorry!"
+                                   message:kErrorUploadResponseWrongFormat];
+                [self.delegate requestFailed:self];
+                return;
+            }
+            /*1012 assuming different kind of error messages*/
+            id error_label = [d objectForKey: JsonErrorLabelKey];
+            NSString *error_msg = [d objectForKey: JsonErrorMessageKey];
+            NSLog(@"[register finished] error: %@, error_msg: %@", error_label, error_msg);
+            
+            // error occurred, then do not continued;
+            if ([self _checkReturnedError: error_label withMessage: error_msg] < 0)
+                return;
+            
+            [self.userInfo addEntriesFromDictionary:d];
+            [self invitefinished];
+        }
+            break; 
         case UPLOAD:{
             if (![response isJSON]) {
                 [self.delegate notifyError:@"Sorry!"
@@ -342,6 +492,19 @@
 - (void)request:(RKRequest *)request didReceivedData:(NSInteger)bytesReceived totalBytesReceived:(NSInteger)totalBytesReceived totalBytesExectedToReceive:(NSInteger)totalBytesExpectedToReceive
 {
     switch (self.ListenterType) {
+        case REGISTER:{
+            NSLog(@"Registered");
+        }
+            break;
+        case CHECKUPDATE:{
+            NSLog(@"updatechecked");
+        }
+            break;
+        case INVITE:{
+            NSLog(@"invited");
+        }
+            break;
+
         case UPLOAD:{
             NSLog(@"received: %d, %d", totalBytesReceived, totalBytesExpectedToReceive);
         }
@@ -362,6 +525,18 @@
 - (void)request:(RKRequest *)request didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
 {
     switch (self.ListenterType) {
+        case REGISTER:{
+            NSLog(@"register sent");
+        }
+            break;
+        case CHECKUPDATE:{
+            NSLog(@"updatecheck sent");
+        }
+            break;
+        case INVITE:{
+            NSLog(@"invite sent");
+        }
+            break;
         case UPLOAD:{
             float p = (float)totalBytesWritten/(float)totalBytesExpectedToWrite;
             [self.delegate updateProgressBarWith: p];
@@ -388,7 +563,20 @@
 - (void)requestDidStartLoad:(RKRequest *)request
 {
     switch (self.ListenterType) {
-        case UPLOAD:{            
+        case REGISTER:{
+            NSLog(@"register started");
+        }
+            break;
+        case CHECKUPDATE:{
+            NSLog(@"updatecheck started");
+        }
+            break;
+        case INVITE:{
+            NSLog(@"invite started");
+        }
+            break;
+
+        case UPLOAD:{
             [self.delegate requestStarted:self];
         }
             break;
@@ -409,6 +597,19 @@
 {
     [self.delegate requestTimeouted:self];
     switch (self.ListenterType) {
+        case REGISTER:{
+            [self.delegate notifyError:@"Register Timeout" message:kErrorUploadTimeout];
+        }
+            break;
+        case CHECKUPDATE:{
+            [self.delegate notifyError:@"updatecheck Timeout" message:kErrorUploadTimeout];
+        }
+            break;
+        case INVITE:{
+            [self.delegate notifyError:@"invite Timeout" message:kErrorUploadTimeout];
+        }
+            break;
+
         case UPLOAD:{
             [self.delegate notifyError:@"Upload Request Timeout" message:kErrorUploadTimeout];
         }

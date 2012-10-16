@@ -12,12 +12,17 @@
 #import "UIImage+scale.h"
 #import "AnimationViewController.h"
 #import "ViewControllerWithFlip.h"
+//#import "UserDefault.h"
 
-@interface ViewController () {
+@interface ViewController () <UITextFieldDelegate>{
     NSMutableArray *imageReferenceURLs;
     BOOL deleteMode;
 }
 - (void) setupInitial;
+- (void) setUpDemoButtons;
+- (void) setUpRegisterController;
+- (void) setUpInviteController;
+- (void) setUpWaitController;
 
 @end
 
@@ -30,10 +35,96 @@ static bool TESTING;
 
 #pragma mark private methods
 
-- (void) setupInitial{
-    TESTING = TRUE;
+- (void)setUpRegisterController{
+    CGRect frame;
+    waitButton_ = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    frame = IPHONE? CGRectMake(124, 400, 74, 44): CGRectMake(348, 50, 74, 44);
+    [waitButton_ setFrame:frame];
+    [waitButton_ setTitle:@"Wait" forState:UIControlStateNormal];
+    [waitButton_ addTarget:self action:@selector(handlewaitButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     
-    NSLog(@"setUpInitial");
+    inviteButton_ = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    frame = IPHONE? CGRectMake(124, 360, 74, 44): CGRectMake(348, 50, 74, 44);
+    [inviteButton_ setFrame:frame];
+    [inviteButton_ setTitle:@"Invite" forState:UIControlStateNormal];
+    [inviteButton_ addTarget:self action:@selector(handleinviteButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    
+    waitButton_.alpha = 0;
+    inviteButton_.alpha = 0;
+    
+    [self.view addSubview:waitButton_];
+    [self.view addSubview:inviteButton_];
+}
+- (void)showRegisterController{
+    [UIView animateWithDuration:0.25 animations:^{inviteButton_.alpha = 1.0;}];
+    [UIView animateWithDuration:0.25 animations:^{waitButton_.alpha = 1.0;}];
+}
+- (void)removeRegisterController{
+    [UIView animateWithDuration:0.25 animations:^{inviteButton_.alpha = 0.0;}];
+    [UIView animateWithDuration:0.25 animations:^{waitButton_.alpha = 0.0;}];
+    [inviteButton_ removeFromSuperview];
+    [waitButton_ removeFromSuperview];
+}
+- (void) setUpInviteController{
+    CGRect passwordTextFieldFrame = CGRectMake(20, 250, 280.0, 31.0);
+    UITextField *passwordTextField = [[UITextField alloc] initWithFrame:passwordTextFieldFrame];
+    passwordTextField.placeholder = @"GrandMa's invitation Code";
+    passwordTextField.backgroundColor = [UIColor whiteColor];
+    passwordTextField.textColor = [UIColor blackColor];
+    passwordTextField.font = [UIFont systemFontOfSize:14.0f];
+    passwordTextField.borderStyle = UITextBorderStyleRoundedRect;
+    passwordTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    passwordTextField.returnKeyType = UIReturnKeyDone;
+    passwordTextField.textAlignment = 1;
+    passwordTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    passwordTextField.tag = 2;
+    passwordTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    passwordTextField.delegate = self;
+    [self.view addSubview:passwordTextField];
+    
+}
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
+    NSLog(@"textFieldShouldBeginEditing");
+    textField.backgroundColor = [UIColor colorWithRed:220.0f/255.0f green:220.0f/255.0f blue:220.0f/255.0f alpha:1.0f];
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    NSLog(@"textFieldShouldReturn:");
+    NSString *code = textField.text;
+    [self inviteGrandMa: code];
+    [textField resignFirstResponder];
+    return YES;
+}
+
+- (void) showLable:(NSString *)message{
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 185, 280, 66)];
+    NSString *string = [[NSString alloc] initWithFormat:@"%@",message];
+    label.text = string;
+    label.textAlignment = 1;
+    label.font = [UIFont systemFontOfSize:30];
+    label.tag = 10; //temporary
+    label.alpha = 0;
+    [self.view addSubview:label];
+    [UIView animateWithDuration:0.25 animations:^{label.alpha = 1.0;}];
+
+}
+- (void) setUpWaitController{
+    NSLog(@"grandma's invitation code is %@", userInfoManager_.invitationCode);
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 185, 280, 66)];
+    NSString *string = [[NSString alloc] initWithFormat:@"%@",userInfoManager_.invitationCode];
+    label.text = string;
+    label.textAlignment = 1;
+    label.font = [UIFont systemFontOfSize:30];
+    label.tag = 10; //temporary
+    label.alpha = 0;
+    [self.view addSubview:label];
+    [UIView animateWithDuration:0.25 animations:^{label.alpha = 1.0;}];
+
+}
+
+- (void)setUpDemoButtons{
     IPHONE = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)? TRUE : FALSE;
     CGRect frame;
     showImageButton_ = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -75,6 +166,22 @@ static bool TESTING;
     
     [self.view addSubview:showDrawingButton_];
     [self.view addSubview:showAnimationButton_];
+
+    UIButton *UserDemoButton_ = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    frame = IPHONE? CGRectMake(226, 84, 74, 44): CGRectMake(450, 50, 74, 44);
+    [UserDemoButton_ setFrame:frame];
+    [UserDemoButton_ setTitle:@"User" forState:UIControlStateNormal];
+    [UserDemoButton_ addTarget:self action:@selector(handleUserDemoButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:UserDemoButton_];
+
+}
+
+- (void) setupInitial{
+    TESTING = TRUE;
+    
+    NSLog(@"setUpInitial");
+    [self setUpDemoButtons];
     imageViewCount = 0;
     imageViewArray_ = [[NSMutableArray alloc] init];
     imageReferenceURLs = [[NSMutableArray alloc] init];
@@ -88,26 +195,137 @@ static bool TESTING;
     }
     deleteMode = FALSE;
     RKClient *client = [RKClient clientWithBaseURL:[NSURL URLWithString:ServerURL]];
-    detectListener_ = [[ClientController alloc] init];
-    detectListener_.delegate = self;
-    detectListener_.ListenterType = DETECT;
-    uploadListener_ = [[ClientController alloc] init];
-    uploadListener_.delegate = self;
-    uploadListener_.ListenterType = UPLOAD;
-    recogListener_ = [[ClientController alloc] init];
-    recogListener_.delegate = self;
-    recogListener_.ListenterType = RECOG;
-    detectListener_.client = uploadListener_.client = recogListener_.client = client;
+    
+//    detectListener_ = [[ClientController alloc] init];
+//    detectListener_.delegate = self;
+//    detectListener_.ListenterType = DETECT;
+//    uploadListener_ = [[ClientController alloc] init];
+//    uploadListener_.delegate = self;
+//    uploadListener_.ListenterType = UPLOAD;
+//    recogListener_ = [[ClientController alloc] init];
+//    recogListener_.delegate = self;
+//    recogListener_.ListenterType = RECOG;
+//    detectListener_.client = uploadListener_.client = recogListener_.client = client;
     
     progressBar = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
     [progressBar setFrame:CGRectMake(20, 367, 280, 11)];
     progressBar.progress = 0.00999999;
+
     [self.view addSubview:progressBar];
     
     self.isIdle = [NSNumber numberWithBool:YES];
     [self addObserver:self forKeyPath:@"isIdle" options:NSKeyValueObservingOptionOld context:nil];
     self.isIdle = [NSNumber numberWithBool:YES];
+    
+    
+    
+    //on registering new user
+    registerListener_ = [[ClientController alloc] init];
+    registerListener_.delegate = self;
+    registerListener_.client = client;
+    
+    userInfoManager_ = [UserInfoManager sharedInstance];
+    [userInfoManager_ fetchUserDefault];
+    [userInfoManager_ printUserDefault];
+    
 }
+- (void)handleUserDemoButtonTapped:(id)sender{
+    
+    if([userInfoManager_ isFirstTime]){
+        registerListener_.ListenterType = REGISTER;
+        [self setUpRegisterController];
+        [registerListener_ reqisterNewUser];
+        
+    }else{
+        registerListener_.ListenterType = CHECKUPDATE;
+        [registerListener_ checkUpdateOfUser:userInfoManager_.privateId];
+    }
+}
+
+- (void)checkUpdateFinished:(ClientController *)controller{
+    
+    if(![userInfoManager_ isInvited]){
+        NSString *response = [[NSString alloc] initWithFormat:@"%@",[controller.userInfo objectForKey: @"success_message"]];
+        if(response){
+            userInfoManager_.invitationCode = nil;
+            [userInfoManager_ setInvited];
+        }
+    }
+    [userInfoManager_ isInvited]? NSLog(@"invited"): NSLog(@"not invited");
+    
+    if([userInfoManager_ isGrandSon]){
+        [self showLable:@"next view (GS)"];
+    }else{
+        if([userInfoManager_ isInvited]){
+            [self showLable:@"You'r invited!"];
+        }else{
+            NSString *res = [[NSString alloc] initWithFormat:@"%@", userInfoManager_.invitationCode];
+            [self showLable:res];
+        }
+    }
+
+}
+
+
+#pragma mark REGISTER
+
+- (void)registerFinished:(ClientController *)controller{
+    userInfoManager_.invitationCode = [controller.userInfo objectForKey: @"inviation_code"];
+    userInfoManager_.privateId = [controller.userInfo objectForKey: @"private_id"];
+    
+    NSLog(@"privateId: %@", userInfoManager_.privateId);
+    NSLog(@"invitationCode: %@", userInfoManager_.invitationCode);
+    
+    [self showRegisterController];
+
+    
+}
+- (void) inviteGrandMa: (NSString *)code{
+    //pop up a screen
+    NSLog(@"Grandson typed in the invitation code: %@", code);
+    registerListener_.ListenterType = INVITE;
+    [registerListener_ inviteWithCode:code];
+
+}
+
+- (void)inviteFinished:(ClientController *)controller{
+    [self showLable:@"NextView"];
+}
+
+
+- (void) showInvitationCode{
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 185, 280, 66)];
+    label.text = userInfoManager_.invitationCode;
+    label.tag = 10; //temporary
+    label.alpha = 0;
+    [self.view addSubview:label];
+    [UIView animateWithDuration:0.25 animations:^{label.alpha = 1.0;}];
+
+}
+
+- (void)handleinviteButtonTapped:(id)sender{
+    NSLog(@"handleinviteButtonTapped");
+    
+    [userInfoManager_ setUserType: userTypeGrandSon];
+    [userInfoManager_ setInvited];
+    [userInfoManager_ saveUserDefault];
+
+    [self removeRegisterController];
+    [self setUpInviteController];
+}
+
+- (void)handlewaitButtonTapped:(id)sender{
+    NSLog(@"handlewaitButtonTapped");
+    
+    [userInfoManager_ setUserType: userTypeGrandMa];
+    [userInfoManager_ setUnInvited];
+    [userInfoManager_ saveUserDefault];
+
+    [self removeRegisterController];
+    [self setUpWaitController];
+}
+
+
 
 
 - (void) handleshowImageButtonTapped:(id)sender{

@@ -25,12 +25,27 @@
 
 //    #define ServerURL @"http://pound.cs.columbia.edu:8823"
     #define ServerURL @"http://kennel.cs.columbia.edu:8821"
-    #define ServerUploadURI @"/upload.py"
+
     #define ServerDetectionURI @"/get_crop.py?client_id=%@"
     #define ServerRecognitionResultURI @"/get_result.py?client_id=%@"
     #define ServerLabelBreedURI @"/user_label.py?client_id=%@&client_label=%@"
     #define ServerTransferUrlURI @"/FB_image.py?FB_link=%@"
     #define ServerTransferredJpgBaseURI @"/~cck/FB_images/"
+
+
+
+    #define ServerUploadURI @"/upload.py"
+    #define ServerGrandsonURI @"/grandson.py"
+
+
+
+    #define PRIVATEID @"privateID"
+    #define INVITATIONCODE @"invitationCode"
+    #define USERTYPE @"userType"
+    #define FRISTTIME @"firstTime"
+    #define INVITATIONSTATUS @"invitationStatus"
+    #define userTypeGrandMa 0
+    #define userTypeGrandSon 1
 
 //    #define ServerURL @"http://www.valgo.us"
 //    #define ServerUploadURI @"/python/upload.py/file"

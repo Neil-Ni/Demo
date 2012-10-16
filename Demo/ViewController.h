@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <RestKit/RestKit.h>
 #import "ClientController.h"
+#import "UserInfoManager.h"
 
 @interface ViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIPopoverControllerDelegate,  ClientControllerDelegate> {
     UIButton *showImageButton_;
@@ -27,6 +28,14 @@
     
     NSMutableArray *imageViewArray_;
     int imageViewCount;
+    
+    ClientController *registerListener_;
+    
+    UIButton *waitButton_;
+    UIButton *inviteButton_;
+    
+    UserInfoManager *userInfoManager_;
+    
 }
 @property (nonatomic, strong) NSNumber *isIdle;
 

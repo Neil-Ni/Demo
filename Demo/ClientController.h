@@ -25,6 +25,9 @@
 #define UPLOAD 0
 #define DETECT 1
 #define RECOG 2
+#define REGISTER 3
+#define INVITE 4
+#define CHECKUPDATE 5
 
 @class ClientController;
 
@@ -45,6 +48,11 @@
 
 - (void)detectionFinished:(ClientController *)controller;
 - (void)recognitionFinished:(ClientController *)controller;
+- (void)registerFinished:(ClientController *)controller;
+- (void)checkUpdateFinished:(ClientController *)controller;
+- (void)inviteFinished:(ClientController *)controller;
+
+
 
 @end
 
@@ -60,6 +68,8 @@
 - (void)requestDetectionResult:(NSString *)client_id_string;
 - (void)requestRecognitionResult:(NSString *)client_id_string;
 - (void)upload:(UIImage *)img;
-
+- (void)reqisterNewUser;
+- (void)inviteWithCode: (NSString *)code;
+- (void)checkUpdateOfUser: (NSString *)privateId;
 
 @end
