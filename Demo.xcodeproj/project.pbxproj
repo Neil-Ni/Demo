@@ -41,9 +41,13 @@
 		8C93A4161617A50400B1FDD7 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C93A4151617A50400B1FDD7 /* libxml2.dylib */; };
 		8C93A4181617A50C00B1FDD7 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C93A4171617A50C00B1FDD7 /* QuartzCore.framework */; };
 		8C93A4191617A51B00B1FDD7 /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C93A3F61617A05600B1FDD7 /* libRestKit.a */; };
+		8CC178251631049D00AC65FA /* UIView+Animation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC178241631049D00AC65FA /* UIView+Animation.m */; };
+		8CC27E7E16338FB6005E2E64 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC27E7D16338FB6005E2E64 /* LoginViewController.m */; };
+		8CC27E901633B55B005E2E64 /* LoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CC27E8F1633B55B005E2E64 /* LoginView.xib */; };
 		8CC363A9162A0B5900E6C922 /* UserInfoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC363A8162A0B5900E6C922 /* UserInfoManager.m */; };
 		8CD2D3081627D19100FA82F3 /* UserDefault.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD2D3071627D19100FA82F3 /* UserDefault.m */; };
 		8CD595761618C140001A345E /* NetworkUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF57B44161804D500720A6F /* NetworkUtility.m */; };
+		8CF4886016336CF30040D784 /* AnimationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF4885F16336CF30040D784 /* AnimationHelper.m */; };
 		8CF57B341617E0D500720A6F /* ClientController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF57B331617E0D500720A6F /* ClientController.m */; };
 		8CF95C3316164A9200968DA6 /* draggableImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF95C3216164A9200968DA6 /* draggableImageView.m */; };
 /* End PBXBuildFile section */
@@ -141,10 +145,17 @@
 		8C93A4131617A4F900B1FDD7 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		8C93A4151617A50400B1FDD7 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		8C93A4171617A50C00B1FDD7 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		8CC178231631049D00AC65FA /* UIView+Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Animation.h"; sourceTree = "<group>"; };
+		8CC178241631049D00AC65FA /* UIView+Animation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Animation.m"; sourceTree = "<group>"; };
+		8CC27E7C16338FB6005E2E64 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		8CC27E7D16338FB6005E2E64 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		8CC27E8F1633B55B005E2E64 /* LoginView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginView.xib; sourceTree = "<group>"; };
 		8CC363A7162A0B5900E6C922 /* UserInfoManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserInfoManager.h; sourceTree = "<group>"; };
 		8CC363A8162A0B5900E6C922 /* UserInfoManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserInfoManager.m; sourceTree = "<group>"; };
 		8CD2D3061627D19100FA82F3 /* UserDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDefault.h; sourceTree = "<group>"; };
 		8CD2D3071627D19100FA82F3 /* UserDefault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDefault.m; sourceTree = "<group>"; };
+		8CF4885E16336CF30040D784 /* AnimationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimationHelper.h; sourceTree = "<group>"; };
+		8CF4885F16336CF30040D784 /* AnimationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnimationHelper.m; sourceTree = "<group>"; };
 		8CF57B321617E0D500720A6F /* ClientController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClientController.h; sourceTree = "<group>"; };
 		8CF57B331617E0D500720A6F /* ClientController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClientController.m; sourceTree = "<group>"; };
 		8CF57B43161804D500720A6F /* NetworkUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetworkUtility.h; sourceTree = "<group>"; };
@@ -223,6 +234,7 @@
 				8C39CCD81624C1B600709241 /* ViewControllerWithFlip.m */,
 				8C7CF06C161E72200006B752 /* SecondViewController.h */,
 				8C7CF06D161E72200006B752 /* SecondViewController.m */,
+				8CC1782616310A0400AC65FA /* Login */,
 				8CD2D30B1627D1E500FA82F3 /* Network */,
 				8CD2D30A1627D1CB00FA82F3 /* Helper */,
 				8CD2D3091627D19600FA82F3 /* FirstTimeUsing */,
@@ -287,6 +299,20 @@
 				8C93A3FE1617A05600B1FDD7 /* RestKitResources.bundle */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		8CC1782616310A0400AC65FA /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				8CC27E7C16338FB6005E2E64 /* LoginViewController.h */,
+				8CC27E7D16338FB6005E2E64 /* LoginViewController.m */,
+				8CC27E8F1633B55B005E2E64 /* LoginView.xib */,
+				8CC178231631049D00AC65FA /* UIView+Animation.h */,
+				8CC178241631049D00AC65FA /* UIView+Animation.m */,
+				8CF4885E16336CF30040D784 /* AnimationHelper.h */,
+				8CF4885F16336CF30040D784 /* AnimationHelper.m */,
+			);
+			name = Login;
 			sourceTree = "<group>";
 		};
 		8CD2D3091627D19600FA82F3 /* FirstTimeUsing */ = {
@@ -430,6 +456,7 @@
 				8C39CCBF1624813600709241 /* reverse_selected.png in Resources */,
 				8C39CCC01624813600709241 /* shadow_normal.png in Resources */,
 				8C39CCC11624813600709241 /* shadow_selected.png in Resources */,
+				8CC27E901633B55B005E2E64 /* LoginView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -456,6 +483,9 @@
 				8C39CCD91624C1B700709241 /* ViewControllerWithFlip.m in Sources */,
 				8CD2D3081627D19100FA82F3 /* UserDefault.m in Sources */,
 				8CC363A9162A0B5900E6C922 /* UserInfoManager.m in Sources */,
+				8CC178251631049D00AC65FA /* UIView+Animation.m in Sources */,
+				8CF4886016336CF30040D784 /* AnimationHelper.m in Sources */,
+				8CC27E7E16338FB6005E2E64 /* LoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

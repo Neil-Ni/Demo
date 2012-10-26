@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface UserDefault : NSObject
+
 + (NSString *)userDefaultPrivateID;
 + (void)savePrivateId:(NSString *)privateId;
 

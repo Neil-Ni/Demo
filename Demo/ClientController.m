@@ -85,6 +85,46 @@
     return 0;
 }
 
+#pragma mark LOGIN
+- (void)logingWithUser: (NSString *)username andPassword: (NSString *)password{
+    RKParams *params = [RKParams params];
+    [params setValue:username forParam:@"user_name"];
+    [params setValue:password forParam:@"pass_word"];
+    
+    self.request = [self.client post:ServerLogin params:params delegate:self];
+    self.request.backgroundPolicy = RKRequestBackgroundPolicyRequeue;    
+}
+
+- (void)loginfinished:(BOOL)success{
+    [self.delegate loginfinished: success];
+}
+
+#pragma make CREATEACCOUNT
+- (void)createAccount:(NSString *)username andPassword: (NSString *)password{
+    RKParams *params = [RKParams params];
+    [params setValue:username forParam:@"user_name"];
+    [params setValue:password forParam:@"pass_word"];
+    
+    self.request = [self.client post:ServerCreateAccount params:params delegate:self];
+    self.request.backgroundPolicy = RKRequestBackgroundPolicyRequeue;
+
+}
+- (void)createAccountfinished:(BOOL)success{
+    [self.delegate createAccountfinished: success];
+}
+
+
+#pragma mark CHECKUIQUEACCOUNT
+- (void)checkAccountUniqueness: (NSString *)username{
+    RKParams *params = [RKParams params];
+    [params setValue:username forParam:@"user_name"];
+    self.request = [self.client post:ServerCheckUserUniqueness params:params delegate:self];
+    self.request.backgroundPolicy = RKRequestBackgroundPolicyRequeue;
+}
+- (void)checkAccountUniquenessfinished:(BOOL)success{
+    [self.delegate checkAccountUniquenessfinished: success];
+}
+
 #pragma mark INVITE
 
 - (void)inviteWithCode: (NSString *)code{
@@ -105,15 +145,22 @@
 
 #pragma mark REGISTER
 
-- (void)reqisterNewUser{ 
+- (void)reqisterNewUser:(NSString *)private_id{
     if (!self.client)
         self.client = [RKClient clientWithBaseURL:[NSURL URLWithString:ServerURL]];
     
     self.userInfo = [[NSMutableDictionary alloc] init];
     RKParams *params = [RKParams params];
-    [params setValue:@"-1" forParam:@"private_id"];
-    self.request = [self.client post: ServerUploadURI params:params delegate:self];
-    NSLog(@"requested: %@, nil? %d", ServerUploadURI, self.request == nil);
+    if(private_id){
+        [params setValue:private_id forParam:@"private_id"];
+    }else{
+            [params setValue:@"-1" forParam:@"private_id"];
+    }
+    self.request = [self.client post: ServerGrandma params:params delegate:self];
+    NSLog(@"requested: %@, nil? %d", ServerGrandma, self.request == nil);
+
+//    self.request = [self.client post: ServerUploadURI params:params delegate:self];
+//    NSLog(@"requested: %@, nil? %d", ServerUploadURI, self.request == nil);
     self.request.backgroundPolicy = RKRequestBackgroundPolicyRequeue;
 
 }
@@ -121,6 +168,7 @@
 - (void)registerfinished{
     [self.delegate registerFinished:self];
 }
+
 
 #pragma mark CHECKUPDATE
 
@@ -304,90 +352,68 @@
 }
 
 - (void)request:(RKRequest *)request didLoadResponse:(RKResponse *)response{
-        
+    
     NSLog(@"%@", response.bodyAsString);
     
+    if (![response isJSON]) {
+        [self.delegate notifyError:@"Sorry!"
+                           message:kErrorUploadResponseIsNotJson];
+        [self.delegate requestFailed:self];
+        return;
+    }
+    NSDictionary *d = [response parsedBody:nil];
+    if (!d) {
+        [self.delegate notifyError:@"Sorry!"
+                           message:kErrorUploadResponseWrongFormat];
+        [self.delegate requestFailed:self];
+        return;
+    }
+    /*1012 assuming different kind of error messages*/
+    id error_label = [d objectForKey: JsonErrorLabelKey];
+    NSString *error_msg = [d objectForKey: JsonErrorMessageKey];
+    NSLog(@"[Listener finished] error: %@, error_msg: %@", error_label, error_msg);
+    
+    // error occurred, then do not continued;
+    if ([self _checkReturnedError: error_label withMessage: error_msg] < 0)
+        return;
+
     switch (self.ListenterType) {
+        case LOGIN:{
+            BOOL success = FALSE;
+            if([d objectForKey:@"successful_message"]){
+                success = TRUE;
+            }
+            [self loginfinished: success];
+
+        }
+            break;
+        case CHECKUIQUEACCOUNT:{
+            BOOL success = FALSE;
+            if([d objectForKey:@"successful_message"]){
+                success = TRUE;
+            }
+            [self checkAccountUniquenessfinished: success];
+        }
+            break;
+        case CREATEACCOUNT:{
+            BOOL success = FALSE;
+            if([d objectForKey:@"successful_message"]){
+                success = TRUE;
+            }
+            [self createAccountfinished: success];
+        }
+            break;
         case REGISTER:{
-            if (![response isJSON]) {
-                [self.delegate notifyError:@"Sorry!"
-                                   message:kErrorUploadResponseIsNotJson];
-                [self.delegate requestFailed:self];
-                return;
-            }
-            NSDictionary *d = [response parsedBody:nil];
-            if (!d) {
-                [self.delegate notifyError:@"Sorry!"
-                                   message:kErrorUploadResponseWrongFormat];
-                [self.delegate requestFailed:self];
-                return;
-            }
-            /*1012 assuming different kind of error messages*/
-            id error_label = [d objectForKey: JsonErrorLabelKey];
-            NSString *error_msg = [d objectForKey: JsonErrorMessageKey];
-            NSLog(@"[register finished] error: %@, error_msg: %@", error_label, error_msg);
-            
-            // error occurred, then do not continued;
-            if ([self _checkReturnedError: error_label withMessage: error_msg] < 0)
-                return;
-            
-            /*1012 giving a session ID here?*/
-            //NSString *client_id_string = [NSString stringWithFormat:@"%@", [d objectForKey:RecognitionClientIdKey]];
-            
             [self.userInfo addEntriesFromDictionary:d];
             [self registerfinished];
         }
             break;
         case CHECKUPDATE:{
-            if (![response isJSON]) {
-                [self.delegate notifyError:@"Sorry!"
-                                   message:kErrorUploadResponseIsNotJson];
-                [self.delegate requestFailed:self];
-                return;
-            }
-            NSDictionary *d = [response parsedBody:nil];
-            if (!d) {
-                [self.delegate notifyError:@"Sorry!"
-                                   message:kErrorUploadResponseWrongFormat];
-                [self.delegate requestFailed:self];
-                return;
-            }
-            
-            id error_label = [d objectForKey: JsonErrorLabelKey];
-            NSString *error_msg = [d objectForKey: JsonErrorMessageKey];
-            NSLog(@"[updatecheck finished] error: %@, error_msg: %@", error_label, error_msg);
-            
-            if ([self _checkReturnedError: error_label withMessage: error_msg] < 0)
-                return;
-            
             [self.userInfo addEntriesFromDictionary:d];
             [self checkUpdateFinished];
         }
             break;
         case INVITE:{
-            
-            if (![response isJSON]) {
-                [self.delegate notifyError:@"Sorry!"
-                                   message:kErrorUploadResponseIsNotJson];
-                [self.delegate requestFailed:self];
-                return;
-            }
-            NSDictionary *d = [response parsedBody:nil];
-            if (!d) {
-                [self.delegate notifyError:@"Sorry!"
-                                   message:kErrorUploadResponseWrongFormat];
-                [self.delegate requestFailed:self];
-                return;
-            }
-            /*1012 assuming different kind of error messages*/
-            id error_label = [d objectForKey: JsonErrorLabelKey];
-            NSString *error_msg = [d objectForKey: JsonErrorMessageKey];
-            NSLog(@"[register finished] error: %@, error_msg: %@", error_label, error_msg);
-            
-            // error occurred, then do not continued;
-            if ([self _checkReturnedError: error_label withMessage: error_msg] < 0)
-                return;
-            
             [self.userInfo addEntriesFromDictionary:d];
             [self invitefinished];
         }
@@ -588,6 +614,10 @@
             NSLog(@"recog started");
         }
             break;
+        case CHECKUIQUEACCOUNT:{
+            NSLog(@"checkuniqueaccount started");
+        }
+            break;
         default:
             break;
     }
@@ -622,6 +652,11 @@
             [self.delegate notifyError: @"Request Timeout." message: kErrorRecognitionTimeout];
         }
             break;
+        case CHECKUIQUEACCOUNT:{
+            [self.delegate notifyError: @"checkuniqueaccount Timeout." message: kErrorRecognitionTimeout];
+        }
+            break;
+
         default:
             break;
     }

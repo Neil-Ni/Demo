@@ -12,6 +12,7 @@
 
 @property (strong, nonatomic) NSString *invitationCode;
 @property (strong, nonatomic) NSString *privateId;
+@property (strong, nonatomic) NSString *userName;
 
 + (UserInfoManager *)sharedInstance;
 

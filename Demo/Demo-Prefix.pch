@@ -23,7 +23,6 @@
     #define TwitterConsumerKey @"glBDLbNxlFpOyuVMRuXhWg"
     #define TwitterConsumerSecret @"PEyZRtTYCwzgAotaYqv6ffvuTqkj7ZjC3huLirhcGl4"
 
-//    #define ServerURL @"http://pound.cs.columbia.edu:8823"
     #define ServerURL @"http://kennel.cs.columbia.edu:8821"
 
     #define ServerDetectionURI @"/get_crop.py?client_id=%@"
@@ -37,12 +36,21 @@
     #define ServerUploadURI @"/upload.py"
     #define ServerGrandsonURI @"/grandson.py"
 
+    #define ServerCheckUserUniqueness @"/checkunique.py"
+    #define ServerCreateAccount @"/createaccount.py"
+    #define ServerLogin @"/login.py"
+
+    #define ServerInvite @"/invite.py"
+    #define ServerGrandma @"/grandma.py"
+
 
 
     #define PRIVATEID @"privateID"
+    #define USERNAME @"username"
     #define INVITATIONCODE @"invitationCode"
     #define USERTYPE @"userType"
     #define FRISTTIME @"firstTime"
+    #define FAMILYID @"familyid"
     #define INVITATIONSTATUS @"invitationStatus"
     #define userTypeGrandMa 0
     #define userTypeGrandSon 1
@@ -52,5 +60,14 @@
 //    #define ServerDetectionURI @"/python/get_crop.py/get_rect?client_id=%@"
 //    #define ServerRecognitionResultURI @"/python/get_result.py/rank_list?client_id=%@"
 //    #define ServerLabelBreedURI @"/python/label_breed.py/label?client_id=%@&label=%@"
+
+
+
+
+
+
+
+
+
 
 #endif

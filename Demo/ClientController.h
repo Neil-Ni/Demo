@@ -28,6 +28,9 @@
 #define REGISTER 3
 #define INVITE 4
 #define CHECKUPDATE 5
+#define CHECKUIQUEACCOUNT 6
+#define CREATEACCOUNT 7
+#define LOGIN 8
 
 @class ClientController;
 
@@ -52,6 +55,11 @@
 - (void)checkUpdateFinished:(ClientController *)controller;
 - (void)inviteFinished:(ClientController *)controller;
 
+- (void)checkAccountUniquenessfinished:(BOOL)success;
+- (void)createAccountfinished:(BOOL)success;
+- (void)loginfinished:(BOOL)success;
+
+
 
 
 @end
@@ -68,8 +76,13 @@
 - (void)requestDetectionResult:(NSString *)client_id_string;
 - (void)requestRecognitionResult:(NSString *)client_id_string;
 - (void)upload:(UIImage *)img;
-- (void)reqisterNewUser;
+- (void)reqisterNewUser:(NSString *)private_id;
 - (void)inviteWithCode: (NSString *)code;
 - (void)checkUpdateOfUser: (NSString *)privateId;
+
+- (void)checkAccountUniqueness: (NSString *)username;
+- (void)createAccount:(NSString *)username andPassword: (NSString *)password;
+- (void)logingWithUser:(NSString *)username andPassword: (NSString *)password;
+
 
 @end

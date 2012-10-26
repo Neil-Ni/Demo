@@ -8,16 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import <RestKit/RestKit.h>
-#import "ClientController.h"
 #import "UserInfoManager.h"
+#import "LoginViewController.h"
 
-@interface ViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIPopoverControllerDelegate,  ClientControllerDelegate> {
+@interface ViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIPopoverControllerDelegate, LoginViewControllerDelegate> {
     UIButton *showImageButton_;
     UIButton *sendImageButton_;
     UIButton *deleteImageButton_;
+    
     UIImagePickerController *imagePicker_;
     UIPopoverController *popoverController_;
-    ClientController *uploadListener_, *detectListener_, *recogListener_;
     NSTimer *progressUpdateTimer_;
     UIProgressView *progressBar;
     float maxProgressValue;
@@ -29,14 +29,13 @@
     NSMutableArray *imageViewArray_;
     int imageViewCount;
     
-    ClientController *registerListener_;
-    
-    UIButton *waitButton_;
-    UIButton *inviteButton_;
-    
     UserInfoManager *userInfoManager_;
     
+    LoginViewController *LoginViewViewController_;
 }
 @property (nonatomic, strong) NSNumber *isIdle;
+@property (strong, nonatomic) IBOutlet UIView *ContainerView;
+
+@property (strong, nonatomic) IBOutlet UILabel *TESTIND;
 
 @end

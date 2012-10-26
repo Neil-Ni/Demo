@@ -9,11 +9,39 @@
             <objects>
                 <viewController id="2" customClass="ViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3">
-                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ik1-j6-5rw">
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </containerView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XiG-2l-vTZ">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="1WQ-VB-EQs"/>
+                                    <constraint firstAttribute="width" constant="225" id="tHN-k1-6uz"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="XiG-2l-vTZ" firstAttribute="top" secondItem="3" secondAttribute="top" constant="107" id="67e-pP-WWL"/>
+                            <constraint firstItem="Ik1-j6-5rw" firstAttribute="top" secondItem="3" secondAttribute="top" constant="163" id="6LW-k1-mo3"/>
+                            <constraint firstItem="Ik1-j6-5rw" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="Rzb-gk-r2d"/>
+                            <constraint firstItem="Ik1-j6-5rw" firstAttribute="centerY" secondItem="3" secondAttribute="centerY" type="default" id="bAd-rj-qX6"/>
+                            <constraint firstItem="Ik1-j6-5rw" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="o0d-O1-gf6"/>
+                            <constraint firstItem="XiG-2l-vTZ" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="45" id="pYq-fE-5aH"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Mgv-td-WWT"/>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <connections>
+                        <outlet property="ContainerView" destination="Ik1-j6-5rw" id="HKq-Co-zkR"/>
+                        <outlet property="TESTIND" destination="XiG-2l-vTZ" id="eRK-IF-Fzz"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
             </objects>
@@ -24,10 +52,11 @@
             <objects>
                 <viewController id="BnQ-UE-VWn" customClass="SecondViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="N6q-nh-6Kf">
-                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <nil key="simulatedStatusBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EdH-sI-UOc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -38,6 +67,7 @@
             <objects>
                 <navigationController navigationBarHidden="YES" id="ZCc-LX-LWd" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="gqK-im-3tX">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -53,14 +83,6 @@
             <point key="canvasLocation" x="80" y="175"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="SecondViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SecondViewController.h"/>
-        </class>
-        <class className="ViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/ViewController.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
