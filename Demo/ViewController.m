@@ -14,6 +14,7 @@
 #import "ViewControllerWithFlip.h"
 #import "UIView+Animation.h"
 #import "AnimationHelper.h"
+#import "draggableView.h"
 
 
 @interface ViewController () <UITextFieldDelegate>{
@@ -50,9 +51,9 @@ static bool TESTING;
     }
 }
 
-- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    
-    NSNumber *old = [change objectForKey: NSKeyValueChangeOldKey];
+//- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+
+/*    NSNumber *old = [change objectForKey: NSKeyValueChangeOldKey];
     
     if ([old isKindOfClass: [NSNull class]])
         return;
@@ -81,8 +82,8 @@ static bool TESTING;
 //        [self cancelledBtn].enabled = YES;
         progressBar.hidden = NO;
 //        self.statusLabel.hidden = NO;
-    }
-}
+    }*/
+//}
 
 - (void)updateProgressBar:(NSTimer*)theTimer{
     NSLog(@"update... %f", progressBar.progress);
@@ -108,11 +109,12 @@ static bool TESTING;
 }
 
 - (void)setupLoginView{
-//    RKClient *client = [RKClient clientWithBaseURL:[NSURL URLWithString:ServerURL]];
+    
+    [self.view addSubview:self.ContainerView];
+    
     self.ContainerView.frame = CGRectMake(20, 168, 280, 231);
     LoginViewViewController_ = [[LoginViewController alloc] init];
     LoginViewViewController_.view.frame = self.ContainerView.frame;
-//    LoginViewViewController_.client = client;
     LoginViewViewController_.delegate = self;
     
     [UIView
@@ -127,49 +129,192 @@ static bool TESTING;
     [AnimationHelper addGradient:self.view];
 }
 
-- (void)ExitFromLoginView:(LoginViewController *)controller{
+//- (void)ExitFromLoginView:(LoginViewController *)controller{
+//
+//    [UIView
+//     transitionFromView:LoginViewViewController_.view
+//     toView:self.ContainerView
+//     duration:0.25f
+//     options:UIViewAnimationOptionTransitionCrossDissolve
+//     completion:^(BOOL finished) {
+//         [LoginViewViewController_ removeFromParentViewController];
+//         [AnimationHelper removeGradient:self.view];
+//     }];
+//    
+//}
+
+- (void)handleShowProfileViewTapped: (id)sender{
+    UserProfileViewController *aUserProfileViewController = [[UserProfileViewController alloc] init];
+    draggableView *view = (draggableView *)self.view;
+    [view MoveWholeViewUpduration:0.4];
+    aUserProfileViewController.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self.navigationController presentViewController:aUserProfileViewController animated:YES completion:^{
+            
+    }];
+}
+
+
+//- (void)ExitFromProfileView:(UserProfileViewController *)controller{
+//    NSLog(@"called");
+//    draggableView *view = (draggableView *)self.view;
+//    [view MoveWholeViewDownduration:0.4];
+//}
+
+
+- (void)setupButtomController{
     
+    UIView *LayoverView = [[UIView alloc] initWithFrame:CGRectMake(0, 488, 320, 80)];
+    LayoverView.backgroundColor = [UIColor blackColor];
+    LayoverView.alpha = 0.2;
+    [self.view addSubview:LayoverView];
+    [self.view sendSubviewToBack:LayoverView];
+
+}
+
+- (void)ExitFromLoginView:(LoginController *)controller{
+    NSLog(@"ExitFromLoginView"); 
     [UIView
-     transitionFromView:LoginViewViewController_.view
-     toView:self.ContainerView
-     duration:0.25f
-     options:UIViewAnimationOptionTransitionCrossDissolve
-     completion:^(BOOL finished) {
-         [LoginViewViewController_ removeFromParentViewController];
-         [AnimationHelper removeGradient:self.view];
+        transitionFromView:controller.view
+        toView:self.ContainerView
+        duration:0.25f
+        options:UIViewAnimationOptionTransitionCrossDissolve
+        completion:^(BOOL finished) {
+            [LoginController_ removeFromParentViewController];
+            [AnimationHelper removeGradient:self.view];
      }];
     
 }
 
-- (void)hi:(LoginViewController *)controller{
-    NSLog(@"hihi");
+- (void)hi:(LoginController *)controller{
+    NSLog(@"hi");
 }
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
+//    draggableView *view = [[draggableView alloc] initWithFrame:self.view.frame];
+//    self.view = view;
+    
+    
     userInfoManager_ = [UserInfoManager sharedInstance];
     [userInfoManager_ fetchUserDefault];
     [userInfoManager_ printUserDefault];
     
-//
-//    if([userInfoManager_ isGrandSon] && [userInfoManager_ isFirstTime]){
-    if(userInfoManager_.userName){
-        [AnimationHelper transitLabel:self.TESTIND withMessage:[NSString stringWithFormat:@"Welcome back %@", userInfoManager_.userName]];
-    }else{
-        [self setupLoginView];
+    
+    for(UIViewController *c in self.childViewControllers){
+        if([c isViewLoaded]){
+            LoginController_ = (LoginController *)c;
+            [AnimationHelper addGradient:self.view];
+        }
     }
+    LoginController_.delegate = self;
+    
+//    [self setupButtomController];
+//    [self.view addSubview:self.ContainerView];
+    
+//    self.ContainerView.frame = CGRectMake(20, 168, 280, 231);
+//    LoginController *LoginViewViewController = [[LoginController alloc] init];
+//    LoginViewViewController.view.frame = self.ContainerView.frame;
+//    LoginViewViewController.delegate = self;
+//    
+//    [UIView
+//     transitionFromView:self.ContainerView
+//     toView:LoginViewViewController.view
+//     duration:0.25f
+//     options:UIViewAnimationOptionTransitionCrossDissolve
+//     completion:^(BOOL finished) {
+//         [self addChildViewController:LoginViewViewController];
+//     }];
+//    
+//    [AnimationHelper addGradient:self.view];
+
+    
+//
+//    if(userInfoManager_.userName){
+//        [AnimationHelper transitLabel:self.TESTIND withMessage:[NSString stringWithFormat:@"Welcome back %@", userInfoManager_.userName]];
+//    }else{
+//        [self setupLoginView];
+//    }
 //    [self setupInitial];
+}
+- (void)quitViewController: (UIViewController *)c{
+    [AnimationHelper removeGradient:self.view];
+    if([c isViewLoaded] ){
+        [UIView
+         transitionFromView:c.view
+         toView:self.ContainerView
+         duration:0.25f
+         options:UIViewAnimationOptionTransitionCrossDissolve
+         completion:^(BOOL finished) {
+             [c removeFromParentViewController];
+             [AnimationHelper removeGradient:self.view];
+         }];
+    }
+    
+}
+
+
+- (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event {
+    NSLog(@"view");
+    NSLog(@"ExitFromLoginView");
+    
+//    [AnimationHelper removeGradient:self.view];
+////    LoginController * l = [[LoginController alloc] init];
+//    for(UIViewController *c in self.childViewControllers){
+//        if([c isViewLoaded] ){
+//            [UIView
+//                 transitionFromView:c.view
+//                 toView:self.ContainerView
+//                 duration:0.25f
+//                 options:UIViewAnimationOptionTransitionCrossDissolve
+//                 completion:^(BOOL finished) {
+//                     [c removeFromParentViewController];
+//                     [AnimationHelper removeGradient:self.view];
+//            }];
+//        }
+//    }
+//
+//    [UIView
+//         transitionFromView:LoginViewViewController_.view
+//         toView:self.ContainerView
+//         duration:0.25f
+//         options:UIViewAnimationOptionTransitionCrossDissolve
+//         completion:^(BOOL finished) {
+//             [LoginViewViewController_ removeFromParentViewController];
+//             [AnimationHelper removeGradient:self.view];
+//         }];
+    
 
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    
-    // Dispose of any resources that can be recreated.
 }
+
+
+//- (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event {
+//    draggableView *view = (draggableView *)self.view;
+//    NSLog(@"hello");
+//    if(view.movingUP){
+//        NSLog(@"Moving up");
+//    }else{
+//        NSLog(@"Moving down");
+//    }
+//}
+//
+//- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
+//    NSLog(@"hi");
+//    draggableView *view = (draggableView *)self.view;
+//    if(view.movingUP){
+//        NSLog(@"Moving up");
+//    }else{
+//        NSLog(@"Moving down");
+//    }
+//}
+
 
 
 #pragma mark UIpopoverControllerDelegate
@@ -267,18 +412,7 @@ static bool TESTING;
         popoverController_.delegate = self;
     }
     deleteMode = FALSE;
-    RKClient *client = [RKClient clientWithBaseURL:[NSURL URLWithString:ServerURL]];
-    
-    //    detectListener_ = [[ClientController alloc] init];
-    //    detectListener_.delegate = self;
-    //    detectListener_.ListenterType = DETECT;
-    //    uploadListener_ = [[ClientController alloc] init];
-    //    uploadListener_.delegate = self;
-    //    uploadListener_.ListenterType = UPLOAD;
-    //    recogListener_ = [[ClientController alloc] init];
-    //    recogListener_.delegate = self;
-    //    recogListener_.ListenterType = RECOG;
-    //    detectListener_.client = uploadListener_.client = recogListener_.client = client;
+    client_ = [RKClient clientWithBaseURL:[NSURL URLWithString:ServerURL]];
     
     progressBar = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
     [progressBar setFrame:CGRectMake(20, 367, 280, 11)];
@@ -289,7 +423,6 @@ static bool TESTING;
     self.isIdle = [NSNumber numberWithBool:YES];
     [self addObserver:self forKeyPath:@"isIdle" options:NSKeyValueObservingOptionOld context:nil];
     self.isIdle = [NSNumber numberWithBool:YES];
-    
     
     
     //on registering new user    

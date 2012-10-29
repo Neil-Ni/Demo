@@ -56,11 +56,12 @@ static UserInfoManager *sharedInstance = nil;
     invitationStatus = ([[standardUserDefaults objectForKey:INVITATIONSTATUS] integerValue] == 1);
 }
 
+- (void)setFamilyid:(int)familyid{
+    family_id = familyid;
+}
+
 - (void)setUserType:(int)userType{
     UserType = userType;
-    if(userType == userTypeGrandSon){
-        self.invitationCode = nil;
-    }
 }
 - (void)setInvited{
     invitationStatus = true;
@@ -90,7 +91,7 @@ static UserInfoManager *sharedInstance = nil;
     [standardUserDefaults setObject:self.privateId forKey:PRIVATEID];
     [standardUserDefaults setObject:self.userName forKey:USERNAME];
     [standardUserDefaults setObject: [NSNumber numberWithInt:UserType] forKey:USERTYPE];
-    [standardUserDefaults setObject: [NSNumber numberWithBool:family_id]  forKey:FAMILYID];
+    [standardUserDefaults setObject: [NSNumber numberWithInt:family_id]  forKey:FAMILYID];
     [standardUserDefaults setObject:self.invitationCode forKey:INVITATIONCODE];
     if(self.privateId) firstTime = false;
     int i = (firstTime)? 0: 1;
@@ -104,7 +105,7 @@ static UserInfoManager *sharedInstance = nil;
 }
 
 - (void)printUserDefault{
-    NSLog(@"{ FirstTime: %@ ; invitationCode: %@ ; privateId: %@ ; userType: %@ ; username: %@; invited: %@; familyId %d; }",
+    NSLog(@"{ FirstTime: %@ ; invitationCode: %@ ; privateId: %@ ; userType: %@ ; username: %@; invited: %@; familyId %d }",
                     ((firstTime)? @"YES" : @"NO"),
                     self.invitationCode,
                     self.privateId,

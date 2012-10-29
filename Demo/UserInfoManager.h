@@ -28,5 +28,6 @@
 - (void)setInvited;
 - (void)setUnInvited; 
 - (BOOL)isInvited;
+- (void)setFamilyid:(int)familyid;
 
 @end

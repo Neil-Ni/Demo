@@ -31,7 +31,6 @@ static int barHeight = 20;
 }
 
 + (void)removeGradient: (UIView *)view{
-    
     [UIView animateWithDuration:0.5 animations:^{
                 view.alpha = 0.5;
                 }
@@ -40,21 +39,24 @@ static int barHeight = 20;
                     view.alpha = 1;
 
     }];
+//    [UIView animateWithDuration:0.5 animations:^{
+//        view.alpha = 1.0;
+//    }];
+
 }
 
 + (void)addGradient: (UIView *)view{
-
     CAGradientLayer *bgLayer = [AnimationHelper blueGradient];
     bgLayer.name = @"gradient";
     CGRect frame = view.frame;
     frame.origin.y -= barHeight;
     bgLayer.frame = frame;
     [view.layer insertSublayer:bgLayer atIndex:0];
-
-    view.alpha = 0;
-    [UIView animateWithDuration:1.25 animations:^{
-        view.alpha = 1.0;
-    }];
+//
+//    view.alpha = 1.0;
+//    [UIView animateWithDuration:1.25 animations:^{
+//        view.alpha = 0.7;
+//    }];
 
 }
 

@@ -389,9 +389,11 @@
             break;
         case CHECKUIQUEACCOUNT:{
             BOOL success = FALSE;
+            
             if([d objectForKey:@"successful_message"]){
                 success = TRUE;
             }
+            
             [self checkAccountUniquenessfinished: success];
         }
             break;
