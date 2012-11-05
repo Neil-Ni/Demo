@@ -9,11 +9,10 @@
 #import <UIKit/UIKit.h>
 #import <RestKit/RestKit.h>
 #import "UserInfoManager.h"
-#import "LoginViewController.h"
 #import "UserProfileViewController.h"
 #import "LoginController.h"
 
-@interface ViewController : UIViewController <UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIPopoverControllerDelegate, LoginViewControllerDelegate, UserProfileViewControllerDelegate, LoginControllerDelegate> {
+@interface ViewController : UIViewController <UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIPopoverControllerDelegate, UserProfileViewControllerDelegate> {
     UIButton *showImageButton_;
     UIButton *sendImageButton_;
     UIButton *deleteImageButton_;
@@ -24,7 +23,6 @@
     UIProgressView *progressBar;
     float maxProgressValue;
     
-    //Demo
     UIButton *showDrawingButton_;
     UIButton *showAnimationButton_;
     
@@ -32,17 +30,12 @@
     int imageViewCount;
     
     UserInfoManager *userInfoManager_;
-    
-    LoginViewController *LoginViewViewController_;
-    
-    LoginController *LoginController_;
-    
     RKClient *client_;
 }
 
 
 @property (nonatomic, strong) NSNumber *isIdle;
-@property (strong, nonatomic) IBOutlet UIView *ContainerView;
+@property (weak, nonatomic) IBOutlet UIView *ContainerView;
 @property (strong, nonatomic) IBOutlet UILabel *TESTIND;
 @property (strong, nonatomic) IBOutlet UIButton *ShowProfileButton;
 - (void)quitViewController: (UIViewController *)c;

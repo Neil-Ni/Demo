@@ -10,7 +10,17 @@
 #import <RestKit/RestKit.h>
 #import "UserInfoManager.h"
 
+@class SignUp2GrandMaViewController;
+
+@protocol SignUp2GrandMaViewControllerDelegate <NSObject>
+- (void)LeaveSignUp2GrandMaView:(SignUp2GrandMaViewController *)controller;
+
+@end
+
 @interface SignUp2GrandMaViewController : UIViewController <RKRequestDelegate, UITextFieldDelegate>
+
+@property (nonatomic, weak) id <SignUp2GrandMaViewControllerDelegate> delegate;
+
 
 @property (nonatomic, strong) RKClient *client;
 @property (nonatomic, strong) RKRequest *request;

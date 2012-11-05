@@ -33,7 +33,6 @@
 		8C39CCD91624C1B700709241 /* ViewControllerWithFlip.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C39CCD81624C1B600709241 /* ViewControllerWithFlip.m */; };
 		8C7CF06E161E72200006B752 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7CF06D161E72200006B752 /* SecondViewController.m */; };
 		8C7CF071161F58370006B752 /* UIImage+scale.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7CF070161F58370006B752 /* UIImage+scale.m */; };
-		8C8B5F57163DFEC5003F4056 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8B5F56163DFEC4003F4056 /* LoginViewController.m */; };
 		8C8B5F5A163E00F9003F4056 /* LoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8B5F59163E00F9003F4056 /* LoginController.m */; };
 		8C8B5F5D163E0D84003F4056 /* SingUp1ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8B5F5C163E0D84003F4056 /* SingUp1ViewController.m */; };
 		8C8B5F60163E0DA3003F4056 /* SignUp1InfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8B5F5F163E0DA3003F4056 /* SignUp1InfoViewController.m */; };
@@ -49,7 +48,6 @@
 		8C93A4181617A50C00B1FDD7 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C93A4171617A50C00B1FDD7 /* QuartzCore.framework */; };
 		8C93A4191617A51B00B1FDD7 /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C93A3F61617A05600B1FDD7 /* libRestKit.a */; };
 		8CC178251631049D00AC65FA /* UIView+Animation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC178241631049D00AC65FA /* UIView+Animation.m */; };
-		8CC27E901633B55B005E2E64 /* LoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CC27E8F1633B55B005E2E64 /* LoginView.xib */; };
 		8CC363A9162A0B5900E6C922 /* UserInfoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC363A8162A0B5900E6C922 /* UserInfoManager.m */; };
 		8CCC9CA8163D06C000B4C0CE /* draggableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCC9CA7163D06C000B4C0CE /* draggableView.m */; };
 		8CCC9CB5163DA4A300B4C0CE /* UserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCC9CB3163DA4A300B4C0CE /* UserProfileViewController.m */; };
@@ -145,8 +143,6 @@
 		8C7CF06D161E72200006B752 /* SecondViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
 		8C7CF06F161F58370006B752 /* UIImage+scale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+scale.h"; sourceTree = "<group>"; };
 		8C7CF070161F58370006B752 /* UIImage+scale.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+scale.m"; sourceTree = "<group>"; };
-		8C8B5F55163DFEC4003F4056 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
-		8C8B5F56163DFEC4003F4056 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		8C8B5F58163E00F9003F4056 /* LoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginController.h; sourceTree = "<group>"; };
 		8C8B5F59163E00F9003F4056 /* LoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginController.m; sourceTree = "<group>"; };
 		8C8B5F5B163E0D83003F4056 /* SingUp1ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingUp1ViewController.h; sourceTree = "<group>"; };
@@ -169,7 +165,6 @@
 		8C93A4171617A50C00B1FDD7 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		8CC178231631049D00AC65FA /* UIView+Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Animation.h"; sourceTree = "<group>"; };
 		8CC178241631049D00AC65FA /* UIView+Animation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Animation.m"; sourceTree = "<group>"; };
-		8CC27E8F1633B55B005E2E64 /* LoginView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginView.xib; sourceTree = "<group>"; };
 		8CC363A7162A0B5900E6C922 /* UserInfoManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserInfoManager.h; sourceTree = "<group>"; };
 		8CC363A8162A0B5900E6C922 /* UserInfoManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserInfoManager.m; sourceTree = "<group>"; };
 		8CCC9CA6163D06C000B4C0CE /* draggableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = draggableView.h; sourceTree = "<group>"; };
@@ -329,7 +324,6 @@
 		8CC1782616310A0400AC65FA /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				8CC27E8F1633B55B005E2E64 /* LoginView.xib */,
 				8C8B5F58163E00F9003F4056 /* LoginController.h */,
 				8C8B5F59163E00F9003F4056 /* LoginController.m */,
 				8C8B5F5B163E0D83003F4056 /* SingUp1ViewController.h */,
@@ -348,8 +342,6 @@
 				8CC178241631049D00AC65FA /* UIView+Animation.m */,
 				8CF4885E16336CF30040D784 /* AnimationHelper.h */,
 				8CF4885F16336CF30040D784 /* AnimationHelper.m */,
-				8C8B5F55163DFEC4003F4056 /* LoginViewController.h */,
-				8C8B5F56163DFEC4003F4056 /* LoginViewController.m */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -504,7 +496,6 @@
 				8C39CCBF1624813600709241 /* reverse_selected.png in Resources */,
 				8C39CCC01624813600709241 /* shadow_normal.png in Resources */,
 				8C39CCC11624813600709241 /* shadow_selected.png in Resources */,
-				8CC27E901633B55B005E2E64 /* LoginView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -535,7 +526,6 @@
 				8CF4886016336CF30040D784 /* AnimationHelper.m in Sources */,
 				8CCC9CA8163D06C000B4C0CE /* draggableView.m in Sources */,
 				8CCC9CB5163DA4A300B4C0CE /* UserProfileViewController.m in Sources */,
-				8C8B5F57163DFEC5003F4056 /* LoginViewController.m in Sources */,
 				8C8B5F5A163E00F9003F4056 /* LoginController.m in Sources */,
 				8C8B5F5D163E0D84003F4056 /* SingUp1ViewController.m in Sources */,
 				8C8B5F60163E0DA3003F4056 /* SignUp1InfoViewController.m in Sources */,

@@ -8,20 +8,8 @@
 
 #import "SignUp1InfoViewController.h"
 
-@interface SignUp1InfoViewController ()
-
-@end
-
 @implementation SignUp1InfoViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+@synthesize delegate;
 
 - (void)viewDidLoad
 {
@@ -36,6 +24,6 @@
 }
 
 - (IBAction)Back:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.delegate LeaveSignUp1InfoView:self];
 }
 @end

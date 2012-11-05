@@ -16,7 +16,7 @@
 @protocol LoginControllerDelegate <NSObject>
 - (void)hi:(LoginController *)controller;
 - (void)ExitFromLoginView:(LoginController *)controller;
-
+- (void)EnterSignUp1View:(LoginController *)controller;
 @end
 
 @interface LoginController : UIViewController  <RKRequestDelegate, UITextFieldDelegate> 

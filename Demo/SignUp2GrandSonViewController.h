@@ -11,7 +11,20 @@
 #import "UserInfoManager.h"
 #import "AnimationHelper.h"
 
+
+@class SignUp2GrandSonViewController;
+
+@protocol SignUp2GrandSonViewControllerDelegate <NSObject>
+- (void)LeaveSignUp2GrandSonView:(SignUp2GrandSonViewController *)controller;
+- (void)ShowSignUp2GrandSonViewInfo:(SignUp2GrandSonViewController *)controller;
+
+@end
+
+
 @interface SignUp2GrandSonViewController : UIViewController  <RKRequestDelegate, UITextFieldDelegate>
+
+@property (nonatomic, weak) id <SignUp2GrandSonViewControllerDelegate> delegate;
+
 
 @property (nonatomic, strong) RKClient *client;
 @property (nonatomic, strong) RKRequest *request;
@@ -24,5 +37,6 @@
 
 - (IBAction)Back:(id)sender;
 - (IBAction)SignUp:(id)sender;
+- (IBAction)ShowInfo:(id)sender;
 
 @end

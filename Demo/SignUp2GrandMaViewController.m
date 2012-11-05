@@ -18,6 +18,7 @@
 @end
 
 @implementation SignUp2GrandMaViewController
+@synthesize delegate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -70,7 +71,7 @@
 }
 
 - (IBAction)Back:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.delegate LeaveSignUp2GrandMaView:self];
 }
 
 - (IBAction)getinvitationCode:(id)sender {

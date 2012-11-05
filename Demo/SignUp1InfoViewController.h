@@ -8,7 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@class SignUp1InfoViewController;
+
+@protocol SignUp1InfoViewControllerDelegate <NSObject>
+- (void)LeaveSignUp1InfoView:(SignUp1InfoViewController *)controller;
+
+@end
+
 @interface SignUp1InfoViewController : UIViewController
+
+@property (nonatomic, weak) id <SignUp1InfoViewControllerDelegate> delegate;
 
 - (IBAction)Back:(id)sender;
 

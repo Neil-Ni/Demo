@@ -8,7 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
+@class SignUp2GSInfoViewController;
+
+@protocol SignUp2GSInfoViewControllerDelegate <NSObject>
+- (void)LeaveSignUp2GSInfoView:(SignUp2GSInfoViewController *)controller;
+
+@end
+
+
 @interface SignUp2GSInfoViewController : UIViewController
+
+@property (nonatomic, weak) id <SignUp2GSInfoViewControllerDelegate> delegate;
+
 - (IBAction)Back:(id)sender;
 
 @end

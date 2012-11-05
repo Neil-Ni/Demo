@@ -16,8 +16,13 @@
 #import "AnimationHelper.h"
 #import "draggableView.h"
 
+#import "SingUp1ViewController.h"
+#import "SignUp1InfoViewController.h"
+#import "SignUp2GrandMaViewController.h"
+#import "SignUp2GrandSonViewController.h"
+#import "SignUp2GSInfoViewController.h"
 
-@interface ViewController () <UITextFieldDelegate>{
+@interface ViewController () <UITextFieldDelegate, SingUp1ViewControllerDelegate, LoginControllerDelegate, SignUp2GrandSonViewControllerDelegate, SignUp2GrandMaViewControllerDelegate, SignUp2GSInfoViewControllerDelegate>{
     NSMutableArray *imageReferenceURLs;
     BOOL deleteMode;
 }
@@ -109,39 +114,9 @@ static bool TESTING;
 }
 
 - (void)setupLoginView{
-    
-    [self.view addSubview:self.ContainerView];
-    
-    self.ContainerView.frame = CGRectMake(20, 168, 280, 231);
-    LoginViewViewController_ = [[LoginViewController alloc] init];
-    LoginViewViewController_.view.frame = self.ContainerView.frame;
-    LoginViewViewController_.delegate = self;
-    
-    [UIView
-         transitionFromView:self.ContainerView
-         toView:LoginViewViewController_.view
-         duration:0.25f
-         options:UIViewAnimationOptionTransitionCrossDissolve
-         completion:^(BOOL finished) {
-             [self addChildViewController:LoginViewViewController_];
-     }];
-    
+    self.ContainerView.hidden = NO;
     [AnimationHelper addGradient:self.view];
 }
-
-//- (void)ExitFromLoginView:(LoginViewController *)controller{
-//
-//    [UIView
-//     transitionFromView:LoginViewViewController_.view
-//     toView:self.ContainerView
-//     duration:0.25f
-//     options:UIViewAnimationOptionTransitionCrossDissolve
-//     completion:^(BOOL finished) {
-//         [LoginViewViewController_ removeFromParentViewController];
-//         [AnimationHelper removeGradient:self.view];
-//     }];
-//    
-//}
 
 - (void)handleShowProfileViewTapped: (id)sender{
     UserProfileViewController *aUserProfileViewController = [[UserProfileViewController alloc] init];
@@ -171,72 +146,35 @@ static bool TESTING;
 
 }
 
-- (void)ExitFromLoginView:(LoginController *)controller{
-    NSLog(@"ExitFromLoginView"); 
-    [UIView
-        transitionFromView:controller.view
-        toView:self.ContainerView
-        duration:0.25f
-        options:UIViewAnimationOptionTransitionCrossDissolve
-        completion:^(BOOL finished) {
-            [LoginController_ removeFromParentViewController];
-            [AnimationHelper removeGradient:self.view];
-     }];
-    
-}
 
 - (void)hi:(LoginController *)controller{
     NSLog(@"hi");
 }
 
+- (void)setUpSlider{
+    [AnimationHelper transitLabel:self.TESTIND withMessage:[NSString stringWithFormat:@"Welcome back %@", userInfoManager_.userName]];
+    self.ShowProfileButton.hidden = NO;
+
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-//    draggableView *view = [[draggableView alloc] initWithFrame:self.view.frame];
-//    self.view = view;
-    
+    self.ContainerView.hidden = YES;
+    self.ShowProfileButton.hidden = YES;
     
     userInfoManager_ = [UserInfoManager sharedInstance];
     [userInfoManager_ fetchUserDefault];
     [userInfoManager_ printUserDefault];
     
     
-    for(UIViewController *c in self.childViewControllers){
-        if([c isViewLoaded]){
-            LoginController_ = (LoginController *)c;
-            [AnimationHelper addGradient:self.view];
-        }
+    if(userInfoManager_.userName){
+        [self.view removeSubviewWithFadeAnimation:self.ContainerView duration:0 option:UIViewAnimationOptionTransitionCrossDissolve];
+        [self setUpSlider];
+    }else{
+        [self setupLoginView];
     }
-    LoginController_.delegate = self;
-    
-//    [self setupButtomController];
-//    [self.view addSubview:self.ContainerView];
-    
-//    self.ContainerView.frame = CGRectMake(20, 168, 280, 231);
-//    LoginController *LoginViewViewController = [[LoginController alloc] init];
-//    LoginViewViewController.view.frame = self.ContainerView.frame;
-//    LoginViewViewController.delegate = self;
-//    
-//    [UIView
-//     transitionFromView:self.ContainerView
-//     toView:LoginViewViewController.view
-//     duration:0.25f
-//     options:UIViewAnimationOptionTransitionCrossDissolve
-//     completion:^(BOOL finished) {
-//         [self addChildViewController:LoginViewViewController];
-//     }];
-//    
-//    [AnimationHelper addGradient:self.view];
-
-    
-//
-//    if(userInfoManager_.userName){
-//        [AnimationHelper transitLabel:self.TESTIND withMessage:[NSString stringWithFormat:@"Welcome back %@", userInfoManager_.userName]];
-//    }else{
-//        [self setupLoginView];
-//    }
 //    [self setupInitial];
 }
 - (void)quitViewController: (UIViewController *)c{
@@ -257,8 +195,6 @@ static bool TESTING;
 
 
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event {
-    NSLog(@"view");
-    NSLog(@"ExitFromLoginView");
     
 //    [AnimationHelper removeGradient:self.view];
 ////    LoginController * l = [[LoginController alloc] init];
@@ -286,35 +222,12 @@ static bool TESTING;
 //             [AnimationHelper removeGradient:self.view];
 //         }];
     
-
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
 }
-
-
-//- (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event {
-//    draggableView *view = (draggableView *)self.view;
-//    NSLog(@"hello");
-//    if(view.movingUP){
-//        NSLog(@"Moving up");
-//    }else{
-//        NSLog(@"Moving down");
-//    }
-//}
-//
-//- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-//    NSLog(@"hi");
-//    draggableView *view = (draggableView *)self.view;
-//    if(view.movingUP){
-//        NSLog(@"Moving up");
-//    }else{
-//        NSLog(@"Moving down");
-//    }
-//}
-
 
 
 #pragma mark UIpopoverControllerDelegate
@@ -488,7 +401,6 @@ static bool TESTING;
 - (void)handleshowAnimationButtonTapped:(id *)sender{
     NSLog(@"handleshowAnimationButtonTapped");
     
-    
     //    AnimationViewController *aAnimationViewController = [[AnimationViewController alloc] init];
     ViewControllerWithFlip *aViewControllerWithFlip = [[ViewControllerWithFlip alloc] init];
     [self.navigationController pushViewController:aViewControllerWithFlip animated:YES];
@@ -530,6 +442,156 @@ static bool TESTING;
         NSLog(@"removing subview of tag %d", view.tag);
         [view removeFromSuperview];
         NSLog(@"subviews count %d", [[self.view subviews] count]);
+    }
+}
+
+
+
+
+
+- (void)transitionFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController
+{
+	if (fromViewController == toViewController)
+	{
+		return;
+	}
+	toViewController.view.frame = self.ContainerView.bounds;
+	toViewController.view.autoresizingMask = self.ContainerView.autoresizingMask;
+    
+	[fromViewController willMoveToParentViewController:nil];
+	[self addChildViewController:toViewController];
+    
+	[self transitionFromViewController:fromViewController
+					  toViewController:toViewController
+							  duration:0.4
+							   options:UIViewAnimationOptionTransitionCrossDissolve
+							animations:^{
+							}
+							completion:^(BOOL finished) {
+								[toViewController didMoveToParentViewController:self];
+								[fromViewController removeFromParentViewController];
+							}];
+}
+
+
+#pragma mark SignUp2GSInfoViewControllerDelegate
+- (void)LeaveSignUp2GSInfoView:(SignUp2GSInfoViewController *)controller{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:
+                                @"MainStoryboard_iPhone" bundle:[NSBundle mainBundle]];
+    
+    SignUp2GrandSonViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SignUp2GrandSonViewController"];
+    vc.delegate = self;
+    [self transitionFromViewController:controller toViewController:vc];
+}
+
+
+#pragma mark SignUp2GrandMaViewControllerDelegate
+- (void)LeaveSignUp2GrandMaView:(SignUp2GrandMaViewController *)controller{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:
+                                @"MainStoryboard_iPhone" bundle:[NSBundle mainBundle]];
+    
+    SingUp1ViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SingUp1ViewController"];
+    vc.delegate = self;
+    [self transitionFromViewController:controller toViewController:vc];    
+}
+
+
+#pragma mark SignUp2GrandSonViewControllerDelegate
+- (void)LeaveSignUp2GrandSonView:(SignUp2GrandSonViewController *)controller{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:
+                                @"MainStoryboard_iPhone" bundle:[NSBundle mainBundle]];
+    
+    SingUp1ViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SingUp1ViewController"];
+    vc.delegate = self;
+    [self transitionFromViewController:controller toViewController:vc];
+}
+- (void)ShowSignUp2GrandSonViewInfo:(SignUp2GrandSonViewController *)controller{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:
+                                @"MainStoryboard_iPhone" bundle:[NSBundle mainBundle]];
+    
+    SignUp2GSInfoViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SignUp2GSInfoViewController"];
+    vc.delegate = self;
+    [self transitionFromViewController:controller toViewController:vc];
+}
+
+
+
+#pragma mark SignUp1InfoViewControllerDelegate
+- (void)LeaveSignUp1InfoView:(SignUp1InfoViewController *)controller{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:
+                                @"MainStoryboard_iPhone" bundle:[NSBundle mainBundle]];
+    
+    SingUp1ViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SingUp1ViewController"];
+    vc.delegate = self;
+    [self transitionFromViewController:controller toViewController:vc];
+}
+
+
+#pragma mark SingUp1ViewControllerDelegate
+
+- (void)LeaveSingUp1View:(SingUp1ViewController *)controller{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:
+                                @"MainStoryboard_iPhone" bundle:[NSBundle mainBundle]];
+    
+    LoginController *vc = [storyboard instantiateViewControllerWithIdentifier:@"LoginController"];
+    vc.delegate = self;
+    [self transitionFromViewController:controller toViewController:vc];
+
+}
+- (void)WaitForInvitation:(SingUp1ViewController *)controller{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:
+                                @"MainStoryboard_iPhone" bundle:[NSBundle mainBundle]];
+    
+    SignUp2GrandMaViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SignUp2GrandMaViewController"];
+    vc.delegate = self;
+    [self transitionFromViewController:controller toViewController:vc];
+    
+}
+- (void)StartAChannel:(SingUp1ViewController *)controller{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:
+                                @"MainStoryboard_iPhone" bundle:[NSBundle mainBundle]];
+    
+    SignUp2GrandSonViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SignUp2GrandSonViewController"];
+    vc.delegate = self;
+    [self transitionFromViewController:controller toViewController:vc];
+    
+}
+- (void)ShowInfo:(SingUp1ViewController *)controller{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:
+                                @"MainStoryboard_iPhone" bundle:[NSBundle mainBundle]];
+    
+    SignUp1InfoViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SignUp1InfoViewController"];
+    vc.delegate = self;
+    [self transitionFromViewController:controller toViewController:vc];
+
+}
+
+
+
+-(void)EnterSignUp1View:(LoginController *)controller{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:
+                                @"MainStoryboard_iPhone" bundle:[NSBundle mainBundle]];
+    
+    SingUp1ViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SingUp1ViewController"];
+    vc.delegate = self;
+    [self transitionFromViewController:controller toViewController:vc];
+}
+-(void)ExitFromLoginView:(LoginController *)controller{
+    [AnimationHelper removeGradient:self.view];
+    [self.view removeSubviewWithFadeAnimation:self.ContainerView duration:0.5 option:UIViewAnimationOptionTransitionCrossDissolve];
+    
+	[controller willMoveToParentViewController:nil];
+    [controller removeFromParentViewController];
+    [userInfoManager_ fetchUserDefault];
+    [self setUpSlider];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"Login"])
+    {
+        LoginController *vc = [segue destinationViewController];
+        vc.delegate =self;
     }
 }
 

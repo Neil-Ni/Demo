@@ -30,6 +30,7 @@
 @end
 
 @implementation SignUp2GrandSonViewController
+@synthesize delegate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -148,11 +149,10 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (IBAction)Back:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.delegate LeaveSignUp2GrandSonView:self];
 }
 
 - (IBAction)SignUp:(id)sender {
@@ -181,6 +181,10 @@
         [AnimationHelper transitLabel:self.header withMessage:@"Fields incomplete"];
     }
 
+}
+
+- (IBAction)ShowInfo:(id)sender {
+    [self.delegate ShowSignUp2GrandSonViewInfo:self];
 }
 
 - (void)request:(RKRequest *)request didFailLoadWithError:(NSError *)error{

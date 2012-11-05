@@ -8,20 +8,8 @@
 
 #import "SingUp1ViewController.h"
 
-@interface SingUp1ViewController ()
-
-@end
-
 @implementation SingUp1ViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+@synthesize delegate;
 
 - (void)viewDidLoad
 {
@@ -36,6 +24,18 @@
 }
 
 - (IBAction)Back:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.delegate LeaveSingUp1View:self];
+}
+
+- (IBAction)WaitForInvitation:(id)sender {
+    [self.delegate WaitForInvitation:self];
+}
+
+- (IBAction)StartAChannel:(id)sender {
+    [self.delegate StartAChannel:self];
+}
+
+- (IBAction)ShowInfo:(id)sender {
+    [self.delegate ShowInfo:self];
 }
 @end

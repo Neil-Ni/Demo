@@ -13,6 +13,7 @@
 
 static int barHeight = 20;
 
+
 + (void)addLayerOn: (UIView *)view{
     UIView *LayerView = [[UIView alloc] initWithFrame:view.frame];
     LayerView.frame = view.frame;

@@ -44,6 +44,14 @@
     self.password.delegate = self;
     userInfoManager_ = [UserInfoManager sharedInstance];
     self.isQuitting = [NSNumber numberWithInt:0];
+    
+    
+    
+    [self.delegate hi:self];
+    [self.delegate hi:self];
+
+    [self.delegate hi:self];
+
 }
 
 
@@ -113,7 +121,7 @@
 }
 
 - (IBAction)SignUp:(id)sender {
-    
+    [self.delegate EnterSignUp1View:self];
 }
 
 - (IBAction)LogIn:(id)sender {
