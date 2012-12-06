@@ -23,12 +23,13 @@
     int UserType;
     BOOL invitationStatus;
     int family_id;
+    int lastImageIndex;
 }
 
 @end
 
 @implementation UserInfoManager
-@synthesize privateId, invitationCode, userName;
+@synthesize privateId, invitationCode, userName, displayName;
 
 static UserInfoManager *sharedInstance = nil;
 
@@ -46,7 +47,7 @@ static UserInfoManager *sharedInstance = nil;
 
 - (void) fetchUserDefault{
     NSUserDefaults * standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    
+
     self.privateId = [standardUserDefaults objectForKey:PRIVATEID];
     self.userName = [standardUserDefaults objectForKey:USERNAME];
     UserType = [[standardUserDefaults objectForKey:USERTYPE] integerValue];
@@ -54,10 +55,17 @@ static UserInfoManager *sharedInstance = nil;
     self.invitationCode = [standardUserDefaults objectForKey:INVITATIONCODE];
     firstTime = ([[standardUserDefaults objectForKey:FRISTTIME] integerValue] == 0);
     invitationStatus = ([[standardUserDefaults objectForKey:INVITATIONSTATUS] integerValue] == 1);
+    self.displayName = [standardUserDefaults objectForKey:DISPLAYNAME];
+    lastImageIndex = [standardUserDefaults integerForKey:LASTIMAGEINDEX];
+
 }
 
 - (void)setFamilyid:(int)familyid{
     family_id = familyid;
+}
+- (NSString *)getFamilyid{
+    NSString *f_id = [NSString stringWithFormat:@"%d", family_id];
+    return f_id;
 }
 
 - (void)setUserType:(int)userType{
@@ -68,6 +76,12 @@ static UserInfoManager *sharedInstance = nil;
 }
 - (void)setUnInvited{
     invitationStatus = false;
+}
+- (void)setlastImageIndex:(int)index{
+    lastImageIndex = index;
+}
+- (int)getLastImageIndex{
+    return lastImageIndex;
 }
 
 - (BOOL)isInvited{
@@ -88,6 +102,7 @@ static UserInfoManager *sharedInstance = nil;
 
 - (void)saveUserDefault{
     NSUserDefaults * standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setObject:self.displayName forKey:DISPLAYNAME];
     [standardUserDefaults setObject:self.privateId forKey:PRIVATEID];
     [standardUserDefaults setObject:self.userName forKey:USERNAME];
     [standardUserDefaults setObject: [NSNumber numberWithInt:UserType] forKey:USERTYPE];
@@ -98,15 +113,34 @@ static UserInfoManager *sharedInstance = nil;
     [standardUserDefaults setObject: [NSNumber numberWithInt:i] forKey:FRISTTIME];
     i = (invitationStatus)? 1: 0;
     [standardUserDefaults setObject:[NSNumber numberWithInt:i] forKey:INVITATIONSTATUS];
+    [standardUserDefaults setInteger:lastImageIndex forKey:LASTIMAGEINDEX];
     [standardUserDefaults synchronize];
 }
+
 - (void)saveUserDefaultWithPrivateId: (NSString *)pi InvitationCode: (NSString *)ic userType:(int)Ut firstTime: (BOOL) ft{
     
 }
 
+-(void)logout{
+    NSUserDefaults * standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setObject:nil forKey:DISPLAYNAME];
+    [standardUserDefaults setObject:nil forKey:PRIVATEID];
+    [standardUserDefaults setObject:nil forKey:USERNAME];
+    [standardUserDefaults setObject:nil forKey:USERTYPE];
+    [standardUserDefaults setObject:nil  forKey:FAMILYID];
+    [standardUserDefaults setObject:nil forKey:INVITATIONCODE];
+    if(self.privateId) firstTime = false;
+    int i = (firstTime)? 0: 1;
+    [standardUserDefaults setObject: [NSNumber numberWithInt:i] forKey:FRISTTIME];
+    i = (invitationStatus)? 1: 0;
+    [standardUserDefaults setObject:nil forKey:INVITATIONSTATUS];
+    [standardUserDefaults synchronize];
+}
+
 - (void)printUserDefault{
-    NSLog(@"{ FirstTime: %@ ; invitationCode: %@ ; privateId: %@ ; userType: %@ ; username: %@; invited: %@; familyId %d }",
+    NSLog(@"{ FirstTime: %@ ; DisplayName: %@ ; invitationCode: %@ ; privateId: %@ ; userType: %@ ; username: %@; invited: %@; familyId: %d }",
                     ((firstTime)? @"YES" : @"NO"),
+                    self.displayName,
                     self.invitationCode,
                     self.privateId,
                     (UserType==userTypeGrandMa)? @"GrandMa" : @"GrandSon",

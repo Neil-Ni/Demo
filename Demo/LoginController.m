@@ -44,14 +44,6 @@
     self.password.delegate = self;
     userInfoManager_ = [UserInfoManager sharedInstance];
     self.isQuitting = [NSNumber numberWithInt:0];
-    
-    
-    
-    [self.delegate hi:self];
-    [self.delegate hi:self];
-
-    [self.delegate hi:self];
-
 }
 
 
@@ -128,10 +120,10 @@
     [self login];
 }
 
-
 -(void)loginfinished: (BOOL)success{
     if(success){
         userInfoManager_.userName = username_string;
+        [userInfoManager_ setUserType:userTypeGrandSon];
         [userInfoManager_ saveUserDefault];
         [AnimationHelper transitLabel:self.header withMessage:@"Login successful"];
         [self.delegate ExitFromLoginView:self];
@@ -160,6 +152,10 @@
     BOOL success = FALSE;
     if([d objectForKey:@"successful_message"]){
         success = TRUE;
+        int f_id = [[d objectForKey:@"family_id"] intValue];;
+        [userInfoManager_ setFamilyid:f_id];
+        userInfoManager_.invitationCode = [d objectForKey:@"invitation_code"];
+        userInfoManager_.displayName = [d objectForKey:@"display_name"];
     }
     [self loginfinished: success];
 }

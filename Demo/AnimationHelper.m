@@ -13,6 +13,13 @@
 
 static int barHeight = 20;
 
++ (void)hideView:(UIView *)view{
+    [UIView animateWithDuration:0.5 animations:^{
+        view.alpha = 0;
+    }completion:^(BOOL finisehd){
+        [view removeFromSuperview];
+    }];
+}
 
 + (void)addLayerOn: (UIView *)view{
     UIView *LayerView = [[UIView alloc] initWithFrame:view.frame];
@@ -25,21 +32,23 @@ static int barHeight = 20;
     [view addSubviewWithFadeAnimation:LayerView duration:1.0 option:UIViewAnimationCurveEaseIn];
 }
 
-
 + (void)removeLayerOn: (UIView *)view{
     UIView *LayerView = [view viewWithTag:LAYER_TAG];
     [view removeSubviewWithFadeAnimation:LayerView duration:1.0 option:UIViewAnimationCurveEaseOut];
 }
 
 + (void)removeGradient: (UIView *)view{
-    [UIView animateWithDuration:0.5 animations:^{
-                view.alpha = 0.5;
-                }
-                completion:^(BOOL finished){
-                    [[view.layer.sublayers objectAtIndex:0] removeFromSuperlayer];
-                    view.alpha = 1;
-
-    }];
+//    [UIView animateWithDuration:0.5 animations:^{
+//                view.alpha = 0.5;
+//                }
+//                completion:^(BOOL finished){
+//                    [[view.layer.sublayers objectAtIndex:0] removeFromSuperlayer];
+//                    view.alpha = 1;
+//
+//    }];
+    
+    
+    
 //    [UIView animateWithDuration:0.5 animations:^{
 //        view.alpha = 1.0;
 //    }];
@@ -47,12 +56,16 @@ static int barHeight = 20;
 }
 
 + (void)addGradient: (UIView *)view{
-    CAGradientLayer *bgLayer = [AnimationHelper blueGradient];
-    bgLayer.name = @"gradient";
-    CGRect frame = view.frame;
-    frame.origin.y -= barHeight;
-    bgLayer.frame = frame;
-    [view.layer insertSublayer:bgLayer atIndex:0];
+//    CAGradientLayer *bgLayer = [AnimationHelper blueGradient];
+//    bgLayer.name = @"gradient";
+//    CGRect frame = view.frame;
+//    frame.origin.y -= barHeight;
+//    bgLayer.frame = frame;
+//    [view.layer insertSublayer:bgLayer atIndex:0];
+    
+    
+    
+    
 //
 //    view.alpha = 1.0;
 //    [UIView animateWithDuration:1.25 animations:^{

@@ -18,6 +18,7 @@
 +(CAGradientLayer*) greyGradient;
 +(CAGradientLayer*) blueGradient;
 
++ (void)hideView:(UIView *)view;
 
 + (void)addGradient: (UIView *)view;
 + (void)removeGradient: (UIView *)view;

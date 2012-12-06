@@ -13,6 +13,8 @@
 @property (strong, nonatomic) NSString *invitationCode;
 @property (strong, nonatomic) NSString *privateId;
 @property (strong, nonatomic) NSString *userName;
+@property (strong, nonatomic) NSString *displayName;
+
 
 + (UserInfoManager *)sharedInstance;
 
@@ -29,5 +31,9 @@
 - (void)setUnInvited; 
 - (BOOL)isInvited;
 - (void)setFamilyid:(int)familyid;
+- (NSString *)getFamilyid;
+- (void)logout;
+- (int)getLastImageIndex;
+- (void)setlastImageIndex:(int)index;
 
 @end

@@ -40,10 +40,15 @@
     #define ServerCreateAccount @"/createaccount.py"
     #define ServerLogin @"/login.py"
 
+    #define ServerFamilyMember @"/returndisplayname.py"
     #define ServerInvite @"/invite.py"
     #define ServerGrandma @"/grandma.py"
 
 
+
+/*UserDefault Keys*/
+
+    #define DISPLAYNAME @"display_name"
     #define PRIVATEID @"privateID"
     #define USERNAME @"username"
     #define INVITATIONCODE @"invitationCode"
@@ -51,6 +56,8 @@
     #define FRISTTIME @"firstTime"
     #define FAMILYID @"familyid"
     #define INVITATIONSTATUS @"invitationStatus"
+    #define LASTIMAGEINDEX @"lastImageIndex"
+
     #define userTypeGrandMa 0
     #define userTypeGrandSon 1
 

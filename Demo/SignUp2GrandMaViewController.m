@@ -13,12 +13,38 @@
 @interface SignUp2GrandMaViewController (){
     NSMutableDictionary *userInfo;
     UserInfoManager *userInfoManager_;
+    NSTimer *timer_;
 }
-
 @end
 
 @implementation SignUp2GrandMaViewController
 @synthesize delegate;
+
+
+- (void)fetchResult:(NSTimer*)theTimer{
+    RKParams *params = [RKParams params];
+    [params setValue:userInfoManager_.privateId forParam:@"private_id"];
+    self.request = [self.client post: ServerGrandma params:params delegate:self];
+    NSLog(@"requested: %@, nil? %d", ServerGrandma, self.request == nil);
+    self.request.backgroundPolicy = RKRequestBackgroundPolicyRequeue;
+}
+
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    NSNumber *old = [change objectForKey: NSKeyValueChangeOldKey];
+     if ([old isKindOfClass: [NSNull class]])
+     return;
+     
+     NSLog(@"isIdle old value: %d", [old boolValue]);
+     NSLog(@"isIdle changed, %d", [self.isIdle boolValue]);
+    
+     if ([self.isIdle boolValue]) {
+         if (timer_) [timer_ invalidate];
+     }else{
+         timer_ = [NSTimer scheduledTimerWithTimeInterval: 2.0 target:self selector:@selector(fetchResult:) userInfo:nil repeats: YES];
+     }
+}
+
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -34,15 +60,25 @@
     [super viewDidLoad];
     if (!self.client)
         self.client = [RKClient clientWithBaseURL:[NSURL URLWithString:ServerURL]];
+    
+    self.isIdle = [NSNumber numberWithBool:YES];
+    [self addObserver:self forKeyPath:@"isIdle" options:NSKeyValueObservingOptionOld context:nil];
+
+    
     userInfoManager_ = [UserInfoManager sharedInstance];
     userInfo = [[NSMutableDictionary alloc] init];
+    if(userInfoManager_.invitationCode){
+        [AnimationHelper transitLabel:self.header withMessage:userInfoManager_.invitationCode];
+        self.BackButton.hidden = YES;
+        self.GetInvitationCodeButton.hidden = YES;
+        self.isIdle = [NSNumber numberWithBool:NO];
+    }
 	// Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 
@@ -65,10 +101,23 @@
     NSLog(@"privateId: %@", userInfoManager_.privateId);
     NSLog(@"invitationCode: %@", userInfoManager_.invitationCode);
     [userInfoManager_ setUserType:userTypeGrandMa];
-
+    self.isIdle = [NSNumber numberWithBool:NO];
     [userInfoManager_ saveUserDefault];
     [AnimationHelper transitLabel:self.header withMessage:userInfoManager_.invitationCode];
+    [AnimationHelper hideView:self.BackButton];
+    [AnimationHelper hideView:self.GetInvitationCodeButton];
+    
 }
+-(void)checkInvitationStatus{
+    if(![userInfo objectForKey:@"success_message"]) return;
+    userInfoManager_.userName = [userInfo objectForKey: @"user_name"];
+    userInfoManager_.displayName = [userInfo objectForKey:@"display_name"];
+    [userInfoManager_ saveUserDefault];
+    //invited!
+    self.isIdle = [NSNumber numberWithBool:YES];
+    [self.delegate InvitedAndExitFromSignUp2GrandMaView:self];
+}
+
 
 - (IBAction)Back:(id)sender {
     [self.delegate LeaveSignUp2GrandMaView:self];
@@ -78,26 +127,45 @@
     [self reqisterNewUser];
 }
 
+- (IBAction)NVM:(id)sender {
+    self.isIdle = [NSNumber numberWithBool:YES];
+    [self.delegate ExitFromSignUp2GrandMaView:self];
+}
 
 - (void)request:(RKRequest *)request didFailLoadWithError:(NSError *)error{
     NSLog(@"didFailLoadWithError: %@", error.localizedDescription);
 }
 
 - (void)request:(RKRequest *)request didLoadResponse:(RKResponse *)response{
-    
-    NSLog(@"didLoadResponse: %@", response.bodyAsString);
-    
-    if (![response isJSON]) {
-        NSLog(@"response wrong format");
-        return;
+    if([self.isIdle boolValue]){
+        NSLog(@"didLoadResponse: %@", response.bodyAsString);
+        
+        if (![response isJSON]) {
+            NSLog(@"response wrong format");
+            return;
+        }
+        NSDictionary *d = [response parsedBody:nil];
+        if (!d) {
+            NSLog(@"response wrong format");
+            return;
+        }
+        [userInfo addEntriesFromDictionary:d];
+        [self registerfinished];
+    }else{
+        NSLog(@"didLoadResponse: %@", response.bodyAsString);
+        
+        if (![response isJSON]) {
+            NSLog(@"response wrong format");
+            return;
+        }
+        NSDictionary *d = [response parsedBody:nil];
+        if (!d) {
+            NSLog(@"response wrong format");
+            return;
+        }
+        [userInfo addEntriesFromDictionary:d];
+        [self checkInvitationStatus];
     }
-    NSDictionary *d = [response parsedBody:nil];
-    if (!d) {
-        NSLog(@"response wrong format");
-        return;
-    }
-    [userInfo addEntriesFromDictionary:d];
-    [self registerfinished];
 }
 
 - (void)request:(RKRequest *)request didReceivedData:(NSInteger)bytesReceived totalBytesReceived:(NSInteger)totalBytesReceived totalBytesExectedToReceive:(NSInteger)totalBytesExpectedToReceive

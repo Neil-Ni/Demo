@@ -81,6 +81,7 @@
         [userInfoManager_ setUserType:userTypeGrandSon];        
         [userInfoManager_ saveUserDefault];
         
+        [self.delegate ExitSignUp2GrandSonViewInfo:self];
     }else{
         [AnimationHelper transitLabel:self.header withMessage:@"Account Failed to Create"];
     }

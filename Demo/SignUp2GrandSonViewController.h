@@ -17,6 +17,7 @@
 @protocol SignUp2GrandSonViewControllerDelegate <NSObject>
 - (void)LeaveSignUp2GrandSonView:(SignUp2GrandSonViewController *)controller;
 - (void)ShowSignUp2GrandSonViewInfo:(SignUp2GrandSonViewController *)controller;
+- (void)ExitSignUp2GrandSonViewInfo:(SignUp2GrandSonViewController *)controller;
 
 @end
 
